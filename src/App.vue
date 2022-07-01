@@ -8,20 +8,20 @@
                 max-width="40"
                 contain
             ></v-img>
-            <v-app-bar-title>Albums</v-app-bar-title>
+            <v-app-bar-title>Survey World</v-app-bar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn 
                     variant="text"
-                    @click="goAlbums"
+                    @click="goUsers"
                     >
-                  Albums
+                  Users
                 </v-btn>
                 <v-btn 
                     variant="text"
-                    @click="goArtists"
+                    @click="goSurveys"
                     >
-                  Artists
+                  Surveys
                 </v-btn>
             </v-toolbar-items>
       </v-app-bar>
@@ -42,11 +42,11 @@ export default {
     logo,
   }),
   methods: {
-    goAlbums() {
-      this.$router.push({ name: 'albums' });
+    goUsers() {
+      this.$router.push({ name: 'users' });
     },
-    goArtists() {
-      this.$router.push({ name: 'artists' });
+    goSurveys() {
+      this.$router.push({ name: 'surveys' });
     }
   },
 

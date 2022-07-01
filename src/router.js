@@ -1,67 +1,53 @@
 import { createWebHistory, createRouter } from 'vue-router';
 const routes = [
   {
-    path: '/albums',
+    path: '/login',
     alias: '/',
-    name: 'albums',
-    component: () => import('./views/AlbumsList.vue'),
+    name: 'login',
+    component: () => import('./views/Login.vue'),
     props: true,
   },
   {
-    path: '/albums/:id/edit',
-    name: 'editAlbum',
-    component: () => import('./views/EditAlbum.vue'),
+    path: '/users',
+    //alias: '/',
+    name: 'users',
+    component: () => import('./views/UserList.vue'),
     props: true,
   },
   {
-    path: '/addAlbum',
-    name: 'addAlbum',
-    component: () => import('./views/AddAlbum.vue'),
+    path: '/users/:id/edit',
+    name: 'editUser',
+    component: () => import('./views/EditUser.vue'),
+    props: true,
   },
   {
-    path: '/albums/:id/tracks',
+    path: '/addUser',
+    name: 'addUser',
+    component: () => import('./views/AddUser.vue'),
+  },
+  {
+    path: '/users/:id/surveys',
     name: 'view',
-    component: () => import('./views/ViewAlbum.vue'),
+    component: () => import('./views/Survey.vue'),
     props: true,
   },
+  
   {
-    path: '/albums/:albumId/addTrack',
-    name: 'addTrack',
-    component: () => import('./views/AddTrack.vue'),
+    path: '/surveys',
+    name: 'surveys',
+    component: () => import('./views/Survey.vue'),
     props: true,
   },
+  
   {
-    path: '/albums/:albumId/tracks/:trackId/editTrack/',
-    name: 'editTrack',
-    component: () => import('./views/EditTrack.vue'),
-    props: true,
-  },
-  {
-    path: '/artists',
-    name: 'artists',
-    component: () => import('./views/ArtistsList.vue'),
-    props: true,
-  },
-  {
-    path: '/addArtist',
-    name: 'addArtist',
-    component: () => import('./views/AddArtist.vue'),
-  },
-  {
-    path: '/artists/:id/edit',
-    name: 'editArtist',
-    component: () => import('./views/EditArtist.vue'),
-    props: true,
-  },
-  {
-    path: '/artists/:artistName/:artistId',
+    path: '/surveys/:surveyName/:summary',
     name: 'viewArtist',
-    component: () => import('./views/AlbumsList.vue'),
+    component: () => import('./views/Survey.vue'),
     props: true,
   },
 ];
 const router = createRouter({
-  base: process.env.NODE_ENV === 'development' ? '/' : '/album-frontend/',
+  base: process.env.NODE_ENV === 'development' ? '/' : '/user-frontend/',
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
