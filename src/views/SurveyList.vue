@@ -117,7 +117,7 @@ export default {
     },
   },
   mounted() {
-    this.retrieveSurveys();
+    //this.retrieveSurveys();
   },
 };
 </script>

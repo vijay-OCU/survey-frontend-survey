@@ -58,7 +58,7 @@ export default {
     },
     saveUser() {
       var data = {
-        usernamr: this.user.usernamr,
+        username: this.user.username,
         emailid: this.user.email-id,
         survey: this.surveysData.filter(
           (survey) => survey.name === this.user.survey

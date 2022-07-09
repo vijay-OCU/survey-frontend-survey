@@ -82,7 +82,7 @@ export default {
     },
   },
   mounted() {
-    this.retrieveReports();
+    //this.retrieveReports();
   },
 };
 </script>

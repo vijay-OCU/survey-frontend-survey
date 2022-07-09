@@ -28,21 +28,21 @@ const routes = [
   {
     path: '/users/:id/surveys',
     name: 'view',
-    component: () => import('./views/Survey.vue'),
+    component: () => import('./views/SurveyList.vue'),
     props: true,
   },
   
   {
     path: '/surveys',
     name: 'surveys',
-    component: () => import('./views/Survey.vue'),
+    component: () => import('./views/SurveyList.vue'),
     props: true,
   },
   
   {
     path: '/surveys/:surveyName/:summary',
     name: 'viewArtist',
-    component: () => import('./views/Survey.vue'),
+    component: () => import('./views/SurveyList.vue'),
     props: true,
   },
 ];

@@ -1,6 +1,5 @@
 <template>
   <h1>Login Page</h1>
-  <h4>{{ message }}</h4>
   <v-form>
     <v-text-field label="Username" v-model="user.username" />
     <v-text-field label="Password" v-model="user.password" />
@@ -9,39 +8,42 @@
       <v-col col="2">
         <v-btn color="success" @click="loginUser()">Login</v-btn>
       </v-col>
-      <v-col col="2"> </v-col>
     </v-row>
   </v-form>
+  <h4>{{ user.message }}</h4>
 </template>
 <script>
-import UserDataService from '../services/UserDataService';
-import LoginDataService from '../services/LoginDataService';
+import UserDataService from "../services/UserDataService";
+import LoginDataService from "../services/LoginDataService";
 export default {
-  name: 'add-user',
+  name: "login",
   data() {
     return {
-      //logins: this.retrieveLogins.response.data,
-      logins: [],
       user: {
-        id: null,
-        username: '',
-        password: '',
+        username: "",
+        password: "",
+        message: "",
       },
     };
   },
   methods: {
-    retrieveUsers() {
-      LoginDataService.getAll()
+    loginUser() {
+      var data = {
+        username: this.user.username,
+        password: this.user.password,
+      };
+      LoginDataService.signin(data)
         .then((response) => {
-          this.surveysData = response.data;
-          let logins = [];
-          response.data.forEach((login) => {
-            logins.push(login.name);
-          });
-          this.logins = logins;
+          console.log("response", response.status);
+          if (response.status == 200) {
+            this.responseToken = response.data.accessToken;
+            this.user.message = "";
+          }
         })
         .catch((e) => {
-          this.message = e.response.data.message;
+          this.isAuthorized = false;
+          this.user.message = e.response.data.message;
+          console.log("Un-Authorized", this.user.message);
         });
     },
     saveUser() {
@@ -55,19 +57,19 @@ export default {
       UserDataService.create(data)
         .then((response) => {
           this.user.id = response.data.id;
-          console.log('add ' + response.data);
-          this.$router.push({ name: 'users' });
+          console.log("add " + response.data);
+          this.$router.push({ name: "users" });
         })
         .catch((e) => {
           this.message = e.response.data.message;
         });
     },
     cancel() {
-      this.$router.push({ name: 'users' });
+      this.$router.push({ name: "users" });
     },
   },
   mounted() {
-    this.retrieveLogins();
+    // this.retrieveLogins();
   },
 };
 </script>

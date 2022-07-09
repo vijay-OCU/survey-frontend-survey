@@ -132,7 +132,7 @@ export default {
   },
   watch: {
     $route() {
-      this.retrieveUsers();
+      //this.retrieveUsers();
     },
   },
 };
