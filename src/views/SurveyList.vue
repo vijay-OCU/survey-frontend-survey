@@ -1,4 +1,5 @@
 <template>
+  <TopBar showTabs=true />
   <h1>Survey List</h1>
   <h4>{{ message }}</h4>
 
@@ -24,14 +25,8 @@
       <span class="text-h6">Report</span>
     </v-col>
   </v-row>
-  <SurveyDisplay
-    v-for="survey in surveys"
-    :key="survey.id"
-    :survey="survey"
-    @deleteSurvey="goDelete(survey)"
-    @updateSurvey="goEdit(survey)"
-    @viewSurvey="goView(survey)"
-  />
+  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey" @deleteSurvey="goDelete(survey)"
+    @updateSurvey="goEdit(survey)" @viewSurvey="goView(survey)" />
 
   <v-btn @click="removeAllSurveys"> Remove All </v-btn>
 </template>
@@ -79,7 +74,7 @@ export default {
       SurveyDataService.getAll()
         .then(response => {
           this.surveys = response.data;
-          
+
         })
         .catch(e => {
           this.message = e.response.data.message;
@@ -121,4 +116,5 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+</style>

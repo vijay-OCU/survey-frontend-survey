@@ -6,7 +6,7 @@
   </v-col>
   <v-col  cols="12"
         sm="2">
-      <span> {{ user.email-id }}</span>
+      <span> {{ user.role }}</span>
   </v-col>
   <v-col  cols="9"
         sm="1">
@@ -18,8 +18,7 @@
   </v-col>
   <v-col  cols="9"
         sm="1">
-      <v-btn size="x-small" icon="mdi-trash-can" @click="deleteUser"
-      :disabled="user.tracks.length > 0 ? true : false"/>
+      <v-btn size="x-small" icon="mdi-trash-can" @click="deleteUser"/>
   </v-col>
 </v-row>
 </template>

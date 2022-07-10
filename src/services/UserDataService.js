@@ -1,9 +1,9 @@
 import http from '../http-common';
 class UserDataService {
-  getAll() {
-    return http.get('/users/all', {headers:{"x-access-token": responsetoken}});
+  getAll(data) {
+    return http.get('/users/all', {headers:{"x-access-token": data.accessToken}});
   }
-  get(id) {
+  get(id, data) {
     return http.get(`/users/${id}`);
   }
   create(data) {
@@ -12,17 +12,14 @@ class UserDataService {
   update(id, data) {
     return http.put(`/users/${id}`, data);
   }
-  delete(id) {
+  delete(id, data) {
     return http.delete(`/users/${id}`);
   }
-  deleteAll() {
+  deleteAll(data) {
     return http.delete(`/users`);
   }
-  findByTitle(title) {
+  findByTitle(title, data) {
     return http.get(`/users?title=${title}`);
-  }
-  findByArtist(userId) {
-    return http.get(`/users/survey/${surveyId}`);
   }
 }
 export default new UserDataService();

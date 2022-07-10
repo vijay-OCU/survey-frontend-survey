@@ -1,5 +1,6 @@
 <template>
-  <h1>Users List  {{this.surveyName === undefined ? '': ' for '+ this.surveyName }} </h1>
+  <TopBar showTabs=true />
+  <h1>Users List {{ ' for ' + this.currentUser }} </h1>
   <h4>{{ message }}</h4>
   <v-row>
     <v-col cols="12" sm="2">
@@ -17,7 +18,7 @@
       <span class="text-h6">Username</span>
     </v-col>
     <v-col cols="12" sm="2">
-      <span class="text-h6">E-mail id</span>
+      <span class="text-h6">Role</span>
     </v-col>
     <v-col cols="12" sm="1">
       <span class="text-h6">Edit</span>
@@ -29,34 +30,29 @@
       <span class="text-h6">Delete</span>
     </v-col>
   </v-row>
-  <UserDisplay
-    v-for="user in users"
-    :key="user.id"
-    :user="user"
-    @deleteUser="goDelete(user)"
-    @updateUser="goEdit(user)"
-    @viewUser="goView(user)"
-  />
+  <UserDisplay v-for="user in users" :key="user.id" :user="user" @deleteUser="goDelete(user)" @updateUser="goEdit(user)"
+    @viewUser="goView(user)" />
 
   <v-btn @click="removeAllUsers"> Remove All </v-btn>
 </template>
 <script>
+import TopBar from './TopBar.vue';
 import UserDataService from '../services/UserDataService';
 import UserDisplay from '@/components/UserDisplay.vue';
 export default {
   name: 'users-list',
-  props: ['surveyName', 'surveyId'],
+  props: ['accessToken', 'role','currentUser'],
   data() {
     return {
       users: [],
-      currentUser: null,
       currentIndex: -1,
       title: '',
       message: 'Search, Edit or Delete Users',
+      visible: true
     };
   },
   components: {
-    UserDisplay,
+    UserDisplay, TopBar
   },
   methods: {
     goAdd() {
@@ -78,14 +74,17 @@ export default {
         });
     },
     retrieveUsers() {
-        UserDataService.getAll()
-          .then((response) => {
-            this.users = response.data;
-          })
-          .catch((e) => {
-            this.message = e.response.data.message;
-          });
-      
+      var data = {
+        accessToken: this.accessToken,
+      };
+      UserDataService.getAll(data)
+        .then((response) => {
+          this.users = response.data;
+        })
+        .catch((e) => {
+          this.message = e.response.data.message;
+        });
+
     },
     refreshList() {
       this.retrieveUsers();
@@ -128,4 +127,5 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+</style>

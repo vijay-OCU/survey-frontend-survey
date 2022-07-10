@@ -1,55 +1,23 @@
 <template>
-    <v-app>
-      <v-app-bar  >
-            <v-img
-                class="mx-2"
-                :src="logo"
-                max-height="40"
-                max-width="40"
-                contain
-            ></v-img>
-            <v-app-bar-title>Survey World</v-app-bar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn 
-                    variant="text"
-                    @click="goUsers"
-                    >
-                  Users
-                </v-btn>
-                <v-btn 
-                    variant="text"
-                    @click="goSurveys"
-                    >
-                  Surveys
-                </v-btn>
-            </v-toolbar-items>
-      </v-app-bar>
-      <v-main >
-        <v-container>
-          <router-view />
-        </v-container>
-      </v-main>  
-    </v-app>
+    <TopBar showTabs=false /> 
+    <router-view />
 </template>
 
 <script>
-import logo from './assets/oc-logo-white.png'
+import TopBar from './views/TopBar.vue';
 export default {
   name: 'App',
-
-  data: () => ({
-    logo,
-  }),
-  methods: {
-    goUsers() {
-      this.$router.push({ name: 'users' });
-    },
-    goSurveys() {
-      this.$router.push({ name: 'surveys' });
-    }
+  components: {
+    TopBar
   },
-
 }
 </script>
-
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  margin-top: 20px;
+}
+</style>

@@ -9,7 +9,6 @@ const routes = [
   },
   {
     path: '/users',
-    //alias: '/',
     name: 'users',
     component: () => import('./views/UserList.vue'),
     props: true,
@@ -31,14 +30,14 @@ const routes = [
     component: () => import('./views/SurveyList.vue'),
     props: true,
   },
-  
+
   {
     path: '/surveys',
     name: 'surveys',
     component: () => import('./views/SurveyList.vue'),
     props: true,
   },
-  
+
   {
     path: '/surveys/:surveyName/:summary',
     name: 'viewArtist',

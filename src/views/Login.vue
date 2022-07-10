@@ -2,7 +2,9 @@
   <h1>Login Page</h1>
   <v-form>
     <v-text-field label="Username" v-model="user.username" />
-    <v-text-field label="Password" v-model="user.password" />
+    <v-text-field :type="passwordFieldType" label="Password"
+      :append-icon="passwordFieldType == 'password' ? 'mdi-eye' : 'mdi-eye-off'" @click:append="switchVisibility"
+      v-model="user.password" />
     <h4>{{ user.message }}</h4>
     <v-row justify="center">
       <v-col col="2"> </v-col>
@@ -11,23 +13,30 @@
       </v-col>
     </v-row>
   </v-form>
-  
+
 </template>
 <script>
 import UserDataService from "../services/UserDataService";
 import LoginDataService from "../services/LoginDataService";
 export default {
   name: "login",
+  props: ['showTabs'],
   data() {
     return {
       user: {
         username: "",
         password: "",
         message: "",
+        accessToken: "",
+        role: ""
       },
+      passwordFieldType: "password",
     };
   },
   methods: {
+    switchVisibility() {
+      this.passwordFieldType = this.passwordFieldType === "password" ? "text" : "password";
+    },
     loginUser() {
       var data = {
         username: this.user.username,
@@ -35,19 +44,26 @@ export default {
       };
       LoginDataService.login(data)
         .then((response) => {
-          console.log("response", response.status);
+          this.user.password = "",
+            console.log("response", response.status);
           if (response.status == 200) {
-            this.responseToken = response.data.accessToken;
+            this.user.role = response.data.role;
+            this.user.accessToken = response.data.accessToken;
             this.user.message = "";
-            if (response.data.role == "admin")
-            {
-              this.$router.push({ name: 'users' });
+            if (response.data.role == "admin") {
+              this.$router.push({
+                name: 'users', params: {
+                  accessToken:  this.user.accessToken,
+                  role: this.user.role,
+                  currentUser: this.user.username,
+                }
+              });
             }
             else {
-             this.$router.push({ name: 'surveys'})
+              this.$router.push({ name: 'surveys' })
             }
           }
-          
+
         })
         .catch((e) => {
           this.isAuthorized = false;
@@ -82,4 +98,5 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+</style>
