@@ -1,7 +1,6 @@
 <template>
   <h1>Survey List</h1>
   <h4>{{ message }}</h4>
-
   <v-row>
     <v-col cols="12" sm="2">
       <v-btn color="success" @click="goAdd"> Ceate Survey</v-btn>
@@ -78,8 +77,7 @@ export default {
     retrieveSurveys() {
       SurveyDataService.getAll()
         .then(response => {
-          this.surveys = response.data;
-          
+          this.surveys = response.data;        
         })
         .catch(e => {
           this.message = e.response.data.message;
@@ -117,7 +115,7 @@ export default {
     },
   },
   mounted() {
-    //this.retrieveSurveys();
+    this.retrieveSurveys();
   },
 };
 </script>

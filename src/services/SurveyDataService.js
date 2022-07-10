@@ -1,7 +1,8 @@
 import http from "../http-common";
+const responseToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU3NDIxNzUzLCJleHAiOjE2NTc1MDgxNTN9.bbY8afQ-2firZzNHrOiM00CidUPES-JRz_1fnTznMCM";
 class SurveyDataService {
   getAll() {
-    return http.get("/surveys");
+    return http.get("/surveys/all", {headers:{"x-access-token": responseToken}});
   }
   get(id) {
     return http.get(`/surveys/${id}`);

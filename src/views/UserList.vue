@@ -1,5 +1,5 @@
 <template>
-  <h1>Users List  {{this.surveyName === undefined ? '': ' for '+ this.surveyName }} </h1>
+  <h1> Users List </h1>
   <h4>{{ message }}</h4>
   <v-row>
     <v-col cols="12" sm="2">
@@ -45,14 +45,14 @@ import UserDataService from '../services/UserDataService';
 import UserDisplay from '@/components/UserDisplay.vue';
 export default {
   name: 'users-list',
-  props: ['surveyName', 'surveyId'],
+  //props: ['surveyName', 'surveyId'],
   data() {
     return {
       users: [],
       currentUser: null,
       currentIndex: -1,
       title: '',
-      message: 'Search, Edit or Delete Users',
+      message: 'Add, Search  or Delete Users',
     };
   },
   components: {
@@ -84,8 +84,7 @@ export default {
           })
           .catch((e) => {
             this.message = e.response.data.message;
-          });
-      
+          });   
     },
     refreshList() {
       this.retrieveUsers();
@@ -123,7 +122,7 @@ export default {
   },
   watch: {
     $route() {
-      //this.retrieveUsers();
+      this.retrieveUsers();
     },
   },
 };
