@@ -78,7 +78,6 @@ export default {
         });
     },
     retrieveUsers() {
-      if (window.location.pathname === '/user-frontend/users'|| window.location.pathname === '/user-frontend/') {
         UserDataService.getAll()
           .then((response) => {
             this.users = response.data;
@@ -86,15 +85,7 @@ export default {
           .catch((e) => {
             this.message = e.response.data.message;
           });
-      } else {
-        UserDataService.findBySurvey(this.surveyId)
-          .then((response) => {
-            this.users = response.data;
-          })
-          .catch((e) => {
-            this.message = e.response.data.message;
-          });
-      }
+      
     },
     refreshList() {
       this.retrieveUsers();

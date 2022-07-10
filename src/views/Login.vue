@@ -3,6 +3,7 @@
   <v-form>
     <v-text-field label="Username" v-model="user.username" />
     <v-text-field label="Password" v-model="user.password" />
+    <h4>{{ user.message }}</h4>
     <v-row justify="center">
       <v-col col="2"> </v-col>
       <v-col col="2">
@@ -10,7 +11,7 @@
       </v-col>
     </v-row>
   </v-form>
-  <h4>{{ user.message }}</h4>
+  
 </template>
 <script>
 import UserDataService from "../services/UserDataService";
@@ -32,13 +33,21 @@ export default {
         username: this.user.username,
         password: this.user.password,
       };
-      LoginDataService.signin(data)
+      LoginDataService.login(data)
         .then((response) => {
           console.log("response", response.status);
           if (response.status == 200) {
             this.responseToken = response.data.accessToken;
             this.user.message = "";
+            if (response.data.role == "admin")
+            {
+              this.$router.push({ name: 'users' });
+            }
+            else {
+             this.$router.push({ name: 'surveys'})
+            }
           }
+          
         })
         .catch((e) => {
           this.isAuthorized = false;

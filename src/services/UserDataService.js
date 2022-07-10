@@ -1,7 +1,7 @@
 import http from '../http-common';
 class UserDataService {
   getAll() {
-    return http.get('/users');
+    return http.get('/users/all', {headers:{"x-access-token": responsetoken}});
   }
   get(id) {
     return http.get(`/users/${id}`);
