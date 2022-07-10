@@ -48,7 +48,6 @@ export default {
       currentIndex: -1,
       title: '',
       message: 'Search, Edit or Delete Users',
-      visible: true
     };
   },
   components: {
@@ -84,7 +83,6 @@ export default {
         .catch((e) => {
           this.message = e.response.data.message;
         });
-
     },
     refreshList() {
       this.retrieveUsers();
@@ -122,7 +120,7 @@ export default {
   },
   watch: {
     $route() {
-      //this.retrieveUsers();
+      this.retrieveUsers();
     },
   },
 };

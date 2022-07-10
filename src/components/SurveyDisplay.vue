@@ -18,7 +18,7 @@
         size="x-small"
         icon="mdi-trash-can"
         @click="deleteSurvey"
-        :disabled="survey.surveys.length > 0 ? true : false"
+        
       />
     </v-col>
   </v-row>
