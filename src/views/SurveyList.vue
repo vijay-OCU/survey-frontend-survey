@@ -1,5 +1,5 @@
 <template>
-  <TopBar showTabs=true />
+  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUser="this.currentUser" />
   <h1>Survey List</h1>
   <h4>{{ message }}</h4>
   <v-row>
@@ -18,10 +18,10 @@
       <span class="text-h6">Surveyname</span>
     </v-col>
     <v-col cols="12" sm="2">
-      <span class="text-h6">View</span>
+      <span class="text-h6">View Report</span>
     </v-col>
     <v-col cols="12" sm="2">
-      <span class="text-h6">Report</span>
+      <span class="text-h6">Delete</span>
     </v-col>
   </v-row>
   <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey" @deleteSurvey="goDelete(survey)"
@@ -30,22 +30,25 @@
   <v-btn @click="removeAllSurveys"> Remove All </v-btn>
 </template>
 <script>
+
+import TopBar from './TopBar.vue';
 import SurveyDataService from '../services/SurveyDataService';
-import SurveyDisplay from '@/components/SurveyDisplay.vue';
+import SurveyDisplay from '../components/SurveyDisplay.vue';
 
 export default {
   name: 'surveys-list',
+  props: ['accessToken', 'role', 'currentUser'],
   data() {
     return {
       surveys: [],
       currentSurvey: null,
       currentIndex: -1,
-      title: '',
+      surveylist: '',
       message: 'Search, Edit or Delete Surveys',
     };
   },
   components: {
-    SurveyDisplay,
+    SurveyDisplay, TopBar
   },
   methods: {
     goAdd() {
@@ -70,7 +73,10 @@ export default {
         });
     },
     retrieveSurveys() {
-      SurveyDataService.getAll()
+      var data = {
+        accessToken: this.accessToken,
+      };
+      SurveyDataService.getAll(data)
         .then(response => {
           this.surveys = response.data;
         })
@@ -99,7 +105,7 @@ export default {
     },
 
     searchName() {
-      SurveyDataService.findByName(this.title)
+      SurveyDataService.findByName(this.surveylist)
         .then((response) => {
           this.surveys = response.data;
           this.setActiveSurvey(null);
@@ -111,6 +117,11 @@ export default {
   },
   mounted() {
     this.retrieveSurveys();
+  },
+  watch: {
+    $route() {
+      this.retrieveSurveys();
+    },
   },
 };
 </script>

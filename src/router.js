@@ -1,5 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router';
 const routes = [
+  //login
   {
     path: '/login',
     alias: '/',
@@ -7,22 +8,24 @@ const routes = [
     component: () => import('./views/Login.vue'),
     props: true,
   },
+  //all users
   {
     path: '/users',
     name: 'users',
     component: () => import('./views/UserList.vue'),
     props: true,
   },
+  //Create user
+  {
+    path: '/addUser',
+    name: 'addUser',
+    component: () => import('./views/AddUser.vue'),
+  },
   {
     path: '/users/:id/edit',
     name: 'editUser',
     component: () => import('./views/EditUser.vue'),
     props: true,
-  },
-  {
-    path: '/addUser',
-    name: 'addUser',
-    component: () => import('./views/AddUser.vue'),
   },
   {
     path: '/users/:id/surveys',

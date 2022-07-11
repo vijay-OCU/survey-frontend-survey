@@ -3,17 +3,14 @@
     <v-col cols="12" sm="2">
       <span>{{ survey.name }}</span>
     </v-col>
-    <v-col cols="9" sm="1">
-      <v-btn size="x-small" icon="mdi-pencil" @click="updateSurvey" />
-    </v-col>
-    <v-col cols="9" sm="1">
+    <v-col cols="12" sm="2">
       <v-btn
         size="x-small"
         icon="mdi-format-list-bulleted-type"
         @click="viewSurvey"
       />
     </v-col>
-    <v-col cols="9" sm="1">
+    <v-col cols="12" sm="2">
       <v-btn
         size="x-small"
         icon="mdi-trash-can"

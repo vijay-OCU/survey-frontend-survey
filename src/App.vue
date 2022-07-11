@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar color="#FCE4EC" dense elevation="4">
+  <v-toolbar color="#FCE4EC" dense elevation="4" class="shrink mx-4">
     <v-img class="mx-2" :src="logo" max-height="40" max-width="40" contain></v-img>
     <v-tool-bar-title>Survey World</v-tool-bar-title>
   </v-toolbar>

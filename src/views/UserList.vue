@@ -58,7 +58,12 @@ export default {
   },
   methods: {
     goAdd() {
-      this.$router.push({ name: 'addUser' });
+      this.$router.push({ name: 'addUser', params: {
+                  accessToken: this.accessToken,
+                  role: this.role,
+                  currentUser: this.username,
+                }
+              });
     },
     goEdit(user) {
       this.$router.push({ name: 'editUser', params: { id: user.id } });

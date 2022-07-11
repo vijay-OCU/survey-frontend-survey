@@ -1,10 +1,10 @@
 <template>
   <h1>Login Page</h1>
   <v-form>
-    <v-text-field label="Username" v-model="user.username" />
+    <v-text-field label="Username" v-model="user.username" class="shrink mx-4"/>
     <v-text-field :type="passwordFieldType" label="Password"
       :append-icon="passwordFieldType == 'password' ? 'mdi-eye' : 'mdi-eye-off'" @click:append="switchVisibility"
-      v-model="user.password" />
+      v-model="user.password" class="shrink mx-4"/>
     <h4>{{ user.message }}</h4>
     <v-row justify="center">
       <v-col col="2"> </v-col>

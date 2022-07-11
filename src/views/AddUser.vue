@@ -1,16 +1,16 @@
 <template>
+  <TopBarVue showTabs=false :accessToken="this.accessToken" :role="this.role" :currentUser="this.currentUser" />
   <h1>User Add</h1>
   <h4>{{ message }}</h4>
   <v-form>
-    <v-text-field label="Username" v-model="user.username" />
-    <v-text-field label="Email-id" v-model="user.emailid" />
+    <v-text-field label="Username" v-model="user.username" class="shrink mx-4"/>
+    <v-text-field label="Password" v-model="user.password" class="shrink mx-4"/>
     <v-select
-      :items="surveys"
-      item-text="name"
-      item-value="id"
-      label="password"
+      :items="roles"
+      label="Role"
       solo
-      v-model="user.survey"
+      v-model="user.role"
+      class="shrink mx-4"
     ></v-select>
     <v-row justify="center">
       <v-col col="2"> </v-col>
@@ -25,50 +25,46 @@
   </v-form>
 </template>
 <script>
+import TopBarVue from './TopBar.vue';
 import UserDataService from '../services/UserDataService';
-import SurveyDataService from '../services/SurveyDataService';
 export default {
   name: 'add-user',
+  props: ['accessToken', 'role', 'currentUser'],
   data() {
     return {
-      //surveys: this.retrieveSurveys.response.data,
-      surveys: [],
+      roles:['admin','user'],
       user: {
         id: null,
-        usernamr: '',
-        emailid: '',
+        username: '',
+        password: ''
       },
       message: 'Enter data and click save',
     };
   },
+  components:{
+    TopBarVue
+  },
   methods: {
-    retrieveSurveys() {
-      SurveyDataService.getAll()
-        .then((response) => {
-          this.surveysData = response.data;
-          let surveys = [];
-          response.data.forEach((survey) => {
-            surveys.push(survey.name);
-          });
-          this.surveys = surveys;
-        })
-        .catch((e) => {
-          this.message = e.response.data.message;
-        });
-    },
     saveUser() {
+      console.log("toooken:"+this.accessToken);
       var data = {
         username: this.user.username,
-        emailid: this.user.email-id,
-        survey: this.surveysData.filter(
-          (survey) => survey.name === this.user.survey
-        )[0].id,
+        password: this.user.password,
+        role: this.user.role,
+        accessToken: this.accessToken
       };
       UserDataService.create(data)
         .then((response) => {
-          this.user.id = response.data.id;
+          //this.user.id = response.data.id;
           console.log('add ' + response.data);
-          this.$router.push({ name: 'users' });
+          this.$router.push({ 
+            name: 'users', 
+            params: {
+                  accessToken: this.accessToken,
+                  role: this.role,
+                  currentUser: this.username
+                }
+              });
         })
         .catch((e) => {
           this.message = e.response.data.message;
@@ -77,10 +73,7 @@ export default {
     cancel() {
       this.$router.push({ name: 'users' });
     },
-  },
-  mounted() {
-    this.retrieveSurveys();
-  },
+  } 
 };
 </script>
 <style></style>
