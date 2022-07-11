@@ -4,7 +4,7 @@
   <h4>{{ message }}</h4>
   <v-row>
     <v-col cols="12" sm="2">
-      <v-btn color="success" @click="goAdd"> Ceate Survey</v-btn>
+      <v-btn color="success" @click="goAdd"> Create Survey</v-btn>
     </v-col>
     <v-col col="12" sm="8">
       <v-text-field density="compact" clearable v-model="surveylist" />

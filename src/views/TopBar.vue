@@ -1,35 +1,45 @@
 <template>
-    <v-app>
-        <v-app-bar color="#FCE4EC" dense elevation="1" flat outlined prominent rounded>
-            <v-img class="mx-2" :src="logo" max-height="40" max-width="40" contain></v-img>
-            <v-app-bar-title>Survey World</v-app-bar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items color="green">
-                <v-btn variant="text" @click="goUsers" v-if="this.showTabs == 'true' ? true : false">
-                    Users
-                </v-btn>
-                <v-btn variant="text" @click="goSurveys" v-if="this.showTabs == 'true' ? true : false">
-                    Surveys
-                </v-btn>
-            </v-toolbar-items>
-        </v-app-bar>
-    </v-app>
+    <v-toolbar-items color="#0918DA">
+        <v-btn variant="text" @click="goUsers" v-if="this.showTabs == 'true' ? true : false" color="blue" elevation="10"
+            x-large justify-end>
+            Users
+        </v-btn>
+        <v-btn variant="text" @click="goSurveys" v-if="this.showTabs == 'true' ? true : false" color="blue"
+            elevation="10" x-large justify-end>
+            Surveys
+        </v-btn>
+    </v-toolbar-items>
 </template>
 
 <script>
 import logo from '../assets/oc-logo-white.png'
 export default {
     name: 'TopBar',
-    props: ['showTabs'],
+    props: ['showTabs', 'accessToken', 'role', 'currentUser'],
     data: () => ({
         logo,
     }),
     methods: {
         goUsers() {
-            this.$router.push({ name: 'users' });
+            console.log('access Token:::', this.accessToken);
+                        console.log('Role :::', this.role);
+
+            this.$router.push({
+                name: 'users', params: {
+                    accessToken: this.accessToken,
+                    role: this.role,
+                    currentUser: this.username,
+                }
+            });
         },
         goSurveys() {
-            this.$router.push({ name: 'surveys' });
+            this.$router.push({
+                name: 'surveys', params: {
+                    accessToken: this.accessToken,
+                    role: this.role,
+                    currentUser: this.username,
+                }
+            });
         }
     },
 }

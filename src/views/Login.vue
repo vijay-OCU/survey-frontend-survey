@@ -53,7 +53,7 @@ export default {
             if (response.data.role == "admin") {
               this.$router.push({
                 name: 'users', params: {
-                  accessToken:  this.user.accessToken,
+                  accessToken: this.user.accessToken,
                   role: this.user.role,
                   currentUser: this.user.username,
                 }

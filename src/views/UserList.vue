@@ -1,6 +1,6 @@
 <template>
-  <TopBar showTabs=true />
-  <h1>Users List {{ ' for ' + this.currentUser }} </h1>
+  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUser="this.currentUser" />
+  <h1>Users List</h1>
   <h4>{{ message }}</h4>
   <v-row>
     <v-col cols="12" sm="2">
@@ -33,7 +33,7 @@
   <UserDisplay v-for="user in users" :key="user.id" :user="user" @deleteUser="goDelete(user)" @updateUser="goEdit(user)"
     @viewUser="goView(user)" />
 
-  <v-btn @click="removeAllUsers"> Remove All </v-btn>
+  <v-btn @click="removeAllUsers()"> Remove All </v-btn>
 </template>
 <script>
 import TopBar from './TopBar.vue';
@@ -41,13 +41,16 @@ import UserDataService from '../services/UserDataService';
 import UserDisplay from '@/components/UserDisplay.vue';
 export default {
   name: 'users-list',
-  props: ['accessToken', 'role','currentUser'],
+  props: ['accessToken', 'role', 'currentUser'],
   data() {
     return {
       users: [],
       currentIndex: -1,
       title: '',
       message: 'Search, Edit or Delete Users',
+      // accessToken: this.accessToken,
+      // role: this.role,
+      // currentUser: this.currentUser,
     };
   },
   components: {
