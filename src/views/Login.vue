@@ -93,10 +93,5 @@ export default {
       this.$router.push({ name: "users" });
     },
   },
-  mounted() {
-    // this.retrieveLogins();
-  },
 };
 </script>
-<style>
-</style>

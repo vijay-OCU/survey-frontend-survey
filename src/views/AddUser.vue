@@ -1,5 +1,4 @@
 <template>
-  <TopBarVue showTabs=false :accessToken="this.accessToken" :role="this.role" :currentUser="this.currentUser" />
   <h1>User Add</h1>
   <h4>{{ message }}</h4>
   <v-form>

@@ -21,9 +21,6 @@ export default {
     }),
     methods: {
         goUsers() {
-            console.log('access Token:::', this.accessToken);
-                        console.log('Role :::', this.role);
-
             this.$router.push({
                 name: 'users', params: {
                     accessToken: this.accessToken,
@@ -44,4 +41,3 @@ export default {
     },
 }
 </script>
-
