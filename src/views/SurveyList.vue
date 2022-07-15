@@ -6,16 +6,13 @@
     <v-col cols="12" sm="2">
       <v-btn color="success" @click="goAdd"> Create Survey</v-btn>
     </v-col>
-    <v-col col="12" sm="8">
-      <v-text-field density="compact" clearable v-model="surveylist" />
-    </v-col>
-    <v-col cols="12" sm="1">
-      <v-btn color="success" @click="searchName"> Search </v-btn>
-    </v-col>
   </v-row>
   <v-row>
     <v-col cols="12" sm="2">
       <span class="text-h6">Surveyname</span>
+    </v-col>
+    <v-col cols="12" sm="2">
+      <span class="text-h6">View Survey</span>
     </v-col>
     <v-col cols="12" sm="2">
       <span class="text-h6">View Report</span>
@@ -24,9 +21,10 @@
       <span class="text-h6">Delete</span>
     </v-col>
   </v-row>
-  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey" @deleteSurvey="goDelete(survey)"
-    @updateSurvey="goEdit(survey)" @viewSurvey="goView(survey)" />
-
+  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey"
+            @viewSurvey="goViewSurvey(survey)"
+            @viewReport="goViewReport(survey)"
+            @deleteSurvey="goDelete(survey)"/>
   <v-btn @click="removeAllSurveys"> Remove All </v-btn>
 </template>
 <script>

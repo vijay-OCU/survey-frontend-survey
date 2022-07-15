@@ -8,11 +8,18 @@ const routes = [
     component: () => import('./views/Login.vue'),
     props: true,
   },
-  //all users
+  //Users list for admin
   {
     path: '/users',
     name: 'users',
     component: () => import('./views/UserList.vue'),
+    props: true,
+  },
+  //Surveys list for admin and user
+  {
+    path: '/surveys',
+    name: 'surveys',
+    component: () => import('./views/SurveyList.vue'),
     props: true,
   },
   //Create user
@@ -22,32 +29,14 @@ const routes = [
     component: () => import('./views/AddUser.vue'),
     props: true
   },
+  //Edit user
   {
     path: '/users/:id/edit',
     name: 'editUser',
     component: () => import('./views/EditUser.vue'),
     props: true,
   },
-  {
-    path: '/users/:id/surveys',
-    name: 'view',
-    component: () => import('./views/SurveyList.vue'),
-    props: true,
-  },
 
-  {
-    path: '/surveys',
-    name: 'surveys',
-    component: () => import('./views/SurveyList.vue'),
-    props: true,
-  },
-
-  {
-    path: '/surveys/:surveyName/:summary',
-    name: 'viewArtist',
-    component: () => import('./views/SurveyList.vue'),
-    props: true,
-  },
 ];
 const router = createRouter({
   base: process.env.NODE_ENV === 'development' ? '/' : '/user-frontend/',

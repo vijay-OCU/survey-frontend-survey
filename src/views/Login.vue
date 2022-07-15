@@ -60,7 +60,12 @@ export default {
               });
             }
             else {
-              this.$router.push({ name: 'surveys' })
+              this.$router.push({ name: 'surveys' , params: {
+                  accessToken: this.user.accessToken,
+                  role: this.user.role,
+                  currentUser: this.user.username,
+                }
+              })
             }
           }
 
