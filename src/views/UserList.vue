@@ -6,12 +6,6 @@
     <v-col cols="12" sm="2">
       <v-btn color="success" @click="goAdd"> Add User</v-btn>
     </v-col>
-    <v-col col="12" sm="8">
-      <v-text-field density="compact" clearable v-model="title" />
-    </v-col>
-    <v-col cols="12" sm="1">
-      <v-btn color="success" @click="searchTitle"> Search </v-btn>
-    </v-col>
   </v-row>
   <v-row>
     <v-col cols="12" sm="2">
@@ -47,10 +41,7 @@ export default {
       users: [],
       currentIndex: -1,
       title: '',
-      message: 'Search, Edit or Delete Users',
-      // accessToken: this.accessToken,
-      // role: this.role,
-      // currentUser: this.currentUser,
+      message: 'Search, Edit or Delete Users'
     };
   },
   components: {
@@ -66,13 +57,22 @@ export default {
               });
     },
     goEdit(user) {
-      this.$router.push({ name: 'editUser', params: { id: user.id } });
+      this.$router.push({ name: 'editUser', params: {
+                  id: user.id,
+                  accessToken: this.accessToken,
+                  role: this.role,
+                  currentUser: this.username,
+                }
+              });
     },
     goView(user) {
       this.$router.push({ name: 'view', params: { id: user.id } });
     },
     goDelete(user) {
-      UserDataService.delete(user.id)
+      var data = {
+        accessToken: this.accessToken,
+      };
+      UserDataService.delete(user.id,data)
         .then(() => {
           this.retrieveUsers();
         })
@@ -106,17 +106,6 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.refreshList();
-        })
-        .catch((e) => {
-          this.message = e.response.data.message;
-        });
-    },
-
-    searchTitle() {
-      UserDataService.findByTitle(this.title)
-        .then((response) => {
-          this.users = response.data;
-          this.setActiveUser(null);
         })
         .catch((e) => {
           this.message = e.response.data.message;
