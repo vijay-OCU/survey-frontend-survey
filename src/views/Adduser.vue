@@ -24,7 +24,7 @@
   </v-form>
 </template>
 <script>
-import TopBarVue from './TopBar.vue';
+//import TopBarVue from './TopBar.vue';
 import UserDataService from '../services/UserDataService';
 export default {
   name: 'add-user',
@@ -41,7 +41,7 @@ export default {
     };
   },
   components:{
-    TopBarVue
+    //TopBarVue
   },
   methods: {
     saveUser() {
@@ -54,8 +54,7 @@ export default {
       };
       UserDataService.create(data)
         .then((response) => {
-          //this.user.id = response.data.id;
-          console.log('add ' + response.data);
+          this.user.id = response.data.id;
           this.$router.push({ 
             name: 'users', 
             params: {
@@ -70,7 +69,13 @@ export default {
         });
     },
     cancel() {
-      this.$router.push({ name: 'users' });
+      this.$router.push({
+                name: 'users', params: {
+                  accessToken: this.accessToken,
+                  role: this.role,
+                  currentUser: this.username
+                }
+              });
     },
   } 
 };
