@@ -28,7 +28,7 @@
 import UserDataService from '../services/UserDataService';
 export default {
   name: 'add-user',
-  props: ['accessToken', 'role', 'currentUser'],
+  props: ['accessToken', 'role', 'currentUserId'],
   data() {
     return {
       roles:['admin','user'],
