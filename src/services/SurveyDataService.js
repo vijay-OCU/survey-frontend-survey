@@ -12,6 +12,9 @@ class SurveyDataService {
   create(data) {
     return http.post("/surveys/create", data, {headers:{"x-access-token": data.accessToken}});
   }
+  addQuestions(data) {
+    return http.post(`surveys/${id}/questions/create`, data, {headers:{"x-access-token": data.accessToken}});
+  }
   update(id, data) {
     return http.put(`/surveys/${id}`, data);
   }
