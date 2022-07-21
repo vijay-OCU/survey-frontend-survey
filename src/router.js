@@ -37,6 +37,14 @@ const routes = [
     props: true,
   },
 
+    //Create Survey
+    {
+      path: '/addSurvey',
+      name: 'addSurvey',
+      component: () => import('./views/AddSurvey.vue'),
+      props: true
+    },
+
 ];
 const router = createRouter({
   base: process.env.NODE_ENV === 'development' ? '/' : '/user-frontend/',

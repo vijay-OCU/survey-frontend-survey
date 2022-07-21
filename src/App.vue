@@ -21,12 +21,6 @@ export default {
     logo,
   }),
   methods: {
-    goUsers() {
-      this.$router.push({ name: 'users' });
-    },
-    goSurveys() {
-      this.$router.push({ name: 'surveys' });
-    }
   },
 }
 </script>

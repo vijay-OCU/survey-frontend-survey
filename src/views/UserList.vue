@@ -1,5 +1,5 @@
 <template>
-  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUser="this.currentUser" />
+  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUserId="this.currentUserId" />
   <h1>Users List</h1>
   <h4>{{ message }}</h4>
   <v-row>
@@ -35,7 +35,7 @@ import UserDataService from '../services/UserDataService';
 import UserDisplay from '@/components/UserDisplay.vue';
 export default {
   name: 'users-list',
-  props: ['accessToken', 'role', 'currentUser'],
+  props: ['accessToken', 'role', 'currentUserId'],
   data() {
     return {
       users: [],
@@ -52,7 +52,7 @@ export default {
       this.$router.push({ name: 'addUser', params: {
                   accessToken: this.accessToken,
                   role: this.role,
-                  currentUser: this.username,
+                  currentUser: this.currentUserId,
                 }
               });
     },
@@ -61,7 +61,7 @@ export default {
                   id: user.id,
                   accessToken: this.accessToken,
                   role: this.role,
-                  currentUser: this.username,
+                  currentUser: this.currentUserId,
                 }
               });
     },

@@ -15,7 +15,7 @@
 import logo from '../assets/oc-logo-white.png'
 export default {
     name: 'TopBar',
-    props: ['showTabs', 'accessToken', 'role', 'currentUser'],
+    props: ['showTabs', 'accessToken', 'role', 'currentUserId'],
     data: () => ({
         logo,
     }),
@@ -25,7 +25,7 @@ export default {
                 name: 'users', params: {
                     accessToken: this.accessToken,
                     role: this.role,
-                    currentUser: this.username,
+                    currentUserId: this.currentUserId,
                 }
             });
         },
@@ -34,7 +34,7 @@ export default {
                 name: 'surveys', params: {
                     accessToken: this.accessToken,
                     role: this.role,
-                    currentUser: this.username,
+                    currentUserId: this.currentUserId,
                 }
             });
         }

@@ -1,20 +1,12 @@
 <template>
-  <h1>User Add</h1>
+  <h1>Create Survey</h1>
   <h4>{{ message }}</h4>
   <v-form>
-    <v-text-field label="Username" v-model="user.username" class="shrink mx-4"/>
-    <v-text-field label="Password" v-model="user.password" class="shrink mx-4"/>
-    <v-select
-      :items="roles"
-      label="Role"
-      solo
-      v-model="user.role"
-      class="shrink mx-4"
-    ></v-select>
+    <v-text-field label="Survey Name" v-model="survey.name" class="shrink mx-4"/>
     <v-row justify="center">
       <v-col col="2"> </v-col>
       <v-col col="2">
-        <v-btn color="success" @click="saveUser()">Save</v-btn>
+        <v-btn color="success" @click="saveSurvey()">Save</v-btn>
       </v-col>
       <v-col col="2">
         <v-btn color="info" @click="cancel()">Cancel</v-btn>
@@ -25,17 +17,14 @@
 </template>
 <script>
 //import TopBarVue from './TopBar.vue';
-import UserDataService from '../services/UserDataService';
+import SurveyDataService from '../services/SurveyDataService';
 export default {
-  name: 'add-user',
+  name: 'add-survey',
   props: ['accessToken', 'role', 'currentUserId'],
   data() {
     return {
-      roles:['admin','user'],
-      user: {
-        id: null,
-        username: '',
-        password: ''
+      survey: {
+        name: '',
       },
       message: 'Enter data and click save',
     };
@@ -44,36 +33,35 @@ export default {
     //TopBarVue
   },
   methods: {
-    saveUser() {
-      console.log("toooken:"+this.accessToken);
+    saveSurvey() {
+      console.log(this.currentUserId, 'current User in Add Survey');
+      console.log("token: "+this.accessToken);
       var data = {
-        username: this.user.username,
-        password: this.user.password,
-        role: this.user.role,
+        name: this.survey.name,
+        userId: this.currentUserId,
         accessToken: this.accessToken
       };
-      UserDataService.create(data)
+      SurveyDataService.create(data)
         .then((response) => {
-          this.user.id = response.data.id;
           this.$router.push({ 
-            name: 'users', 
+            name: 'surveys', 
             params: {
                   accessToken: this.accessToken,
                   role: this.role,
-                  currentUser: this.username
+                  currentUserId: this.currentUserId
                 }
               });
         })
         .catch((e) => {
-          this.message = e.response.data.message;
+          this.message = e.response;
         });
     },
     cancel() {
       this.$router.push({
-                name: 'users', params: {
+                name: 'surveys', params: {
                   accessToken: this.accessToken,
                   role: this.role,
-                  currentUser: this.username
+                  currentUserId: this.currentUserId
                 }
               });
     },

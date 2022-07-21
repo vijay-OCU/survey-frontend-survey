@@ -1,5 +1,5 @@
 <template>
-  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUser="this.currentUser" />
+  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUserId="this.currentUserId" />
   <h1>Survey List</h1>
   <h4>{{ message }}</h4>
   <v-row>
@@ -35,7 +35,7 @@ import SurveyDisplay from '../components/SurveyDisplay.vue';
 
 export default {
   name: 'surveys-list',
-  props: ['accessToken', 'role', 'currentUser'],
+  props: ['accessToken', 'role', 'currentUserId'],
   data() {
     return {
       surveys: [],
@@ -50,7 +50,12 @@ export default {
   },
   methods: {
     goAdd() {
-      this.$router.push({ name: 'addSurvey' });
+      console.log('current User in Survey List', this.role, this.accessToken, this.currentUserId );
+      this.$router.push({ name: 'addSurvey', params: {
+                  accessToken: this.accessToken,
+                  role: this.role,
+                  currentUserId: this.currentUserId,
+                } });
     },
     goEdit(survey) {
       this.$router.push({ name: 'editSurvey', params: { id: survey.id } });
@@ -62,7 +67,10 @@ export default {
       });
     },
     goDelete(survey) {
-      SurveyDataService.delete(survey.id)
+            var data = {
+        accessToken: this.accessToken
+      };
+      SurveyDataService.delete(survey.id, data)
         .then(() => {
           this.retrieveSurveys();
         })
@@ -74,6 +82,7 @@ export default {
       var data = {
         accessToken: this.accessToken,
       };
+      if(this.role == 'admin'){
       SurveyDataService.getAll(data)
         .then(response => {
           this.surveys = response.data;
@@ -81,6 +90,17 @@ export default {
         .catch(e => {
           this.message = e.response.data.message;
         });
+      }
+      else {
+              SurveyDataService.getByUserId(this.currentUserId, data)
+        .then(response => {
+          this.surveys = response.data;
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
+      }
+
     },
     refreshList() {
       this.retrieveSurveys();

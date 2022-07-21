@@ -28,7 +28,7 @@
 import UserDataService from "../services/UserDataService";
 export default {
   name: "edit-user",
-  props: ['accessToken', 'role', 'currentUser','id'],
+  props: ['accessToken', 'role', 'currentUserId','id'],
   data() {
     return {
       user: {},
