@@ -14,11 +14,10 @@
       </v-card>
     </v-row>
     <v-row>
-      <v-col>
-      </v-col>
+      <v-col> </v-col>
     </v-row>
     <div v-if="addQuestion">
-      <Questions v-for="(question, index) in questionsList" :key="index"
+      <Questions v-for="(question, index) in questionsList" :key="index" :question="question"
         @deleteQuestion="deleteQuestion(question, index)" @addQuestion="saveQuestion(question, index)" />
     </div>
 
@@ -102,7 +101,7 @@ export default {
       // const questionIndex = this.questionsList.findIndex(x => x.id === this.selectedQuestion.id);
       const question = {
         id: this.selectedQuestion.id,
-        question: '',
+        text: '',
         type: 'EMPTY',
         options: [],
         scale: []
@@ -117,7 +116,7 @@ export default {
       console.log(JSON.stringify(this.questionsList), 'Saving Question, with Index ->', index);
       const updatedQuestion = {
         id: question.id,
-        question: 'Testing....',
+        question: question.text,
         type: question.type,
         options: [],
         scale: []
