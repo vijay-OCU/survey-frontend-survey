@@ -45,6 +45,14 @@ const routes = [
       props: true
     },
 
+    //View Survey
+    {
+      path: '/viewSurvey/:id',
+      name: 'viewSurvey',
+      component: () => import('./views/ViewSurvey.vue'),
+      props: true
+    },
+
 ];
 const router = createRouter({
   base: process.env.NODE_ENV === 'development' ? '/' : '/user-frontend/',
