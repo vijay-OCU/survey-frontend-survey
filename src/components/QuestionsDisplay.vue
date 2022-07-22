@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="justify-center">
       <v-col sm="7">
-        <dynamic-form :form="form" @submitted="formSubmitted" @error="processErrrors" @change="valueChange" />
+        <dynamic-form :form="form" @submitted="formSubmitted" @error="processErrrors" @change="valueChange"/>
         <!-- <v-btn type="submit" :form="form.id">
           Submit
         </v-btn> -->
@@ -11,29 +11,11 @@
         </v-text>
       </v-col>
       <v-col cols="9" sm="1">
-        <v-btn size="small" icon="mdi-trash-can" @click="deleteQuestion(question, index)" />
+        <v-btn size="small" icon="mdi-trash-can" @click="deleteQuestion(question, index)" :disabled="questionAdded"/>
+        <v-btn size="small" icon="mdi-content-save-outline" @click="addQuestion(question, index)" :disabled="questionAdded" />
+
       </v-col>
     </v-row>
-    <!-- <v-row>
-      <div class="" v-if="selectedType === 'TEXT'">
-        <label class="">
-          <span class="">Character limit <input type="number" class="" placeholder="" min="1" max="2048"
-              :disabled="false"></span>
-        </label>
-      </div>
-    </v-row> -->
-    <!-- <v-row>
-      <div class="" v-if="selectedType === 'BOOLEAN'">
-        <div class="">Answer Choices</div>
-        <div class="" v-for="(option, index) in question.options" :key="index">
-          <div class="clear-both">
-            <input type="text" class="width-100 float-left" placeholder="Enter an answer choice" v-model="option.body">
-            <button class="" v-on:click="deleteQuestionOptionItem(question.options, index)"
-              v-if="index > 1">Remove</button>
-          </div>
-        </div>
-      </div>
-    </v-row> -->
 
   </v-container>
 </template>
@@ -62,6 +44,7 @@ export default defineComponent({
       ],
       question: this.options,
       selectedType: 'TEXT',
+      questionAdded: false
     };
   },
 
@@ -76,6 +59,7 @@ export default defineComponent({
           validations: [
             Validator({ validator: required, text: 'This field is required' }),
           ],
+          disabled: false,
         }),
         character: SelectField({
           label: 'Select Question Type',
@@ -96,7 +80,9 @@ export default defineComponent({
               value: 'TEXT',
               label: 'Text Input',
             },
-          ]
+          ],
+          disabled: false,
+
         }),
       },
     });
@@ -121,8 +107,18 @@ export default defineComponent({
   },
 
   methods: {
+
+    isQuestionAdded(){
+      return this.questionAdded;
+    },
+
     deleteQuestion() {
       this.$emit("deleteQuestion");
+    },
+
+    addQuestion() {
+      this.questionAdded = true;
+      this.$emit("addQuestion");
     },
   },
 });

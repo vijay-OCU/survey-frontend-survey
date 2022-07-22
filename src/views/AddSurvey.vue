@@ -4,9 +4,22 @@
   <v-form>
     <v-text-field label="Survey Name" v-model="survey.name" class="shrink mx-4" />
     <v-btn color="info" @click="add()">Add Question</v-btn>
+    <v-row>
+      <v-col> </v-col>
+    </v-row>
+    <v-row>
+      <v-card class="pa-md-1 mx-sm-auto" color="purple" width="300px" v-if="this.questionsList.length == 0">
+        <v-card-title>Note!</v-card-title>
+        <v-card-text>Click Save on Each Question before Saving the Survey</v-card-text>
+      </v-card>
+    </v-row>
+    <v-row>
+      <v-col>
+      </v-col>
+    </v-row>
     <div v-if="addQuestion">
       <Questions v-for="(question, index) in questionsList" :key="index"
-        @deleteQuestion="deleteQuestion(question, index)" />
+        @deleteQuestion="deleteQuestion(question, index)" @addQuestion="saveQuestion(question, index)" />
     </div>
 
     <v-row justify="center">
@@ -24,7 +37,7 @@
 <script>
 //import TopBarVue from './TopBar.vue';
 import SurveyDataService from '../services/SurveyDataService';
-import Questions from '../components/Questions.vue';
+import Questions from '../components/QuestionsDisplay.vue';
 
 export default {
   name: 'add-survey',
@@ -54,25 +67,27 @@ export default {
       };
       SurveyDataService.create(data)
         .then((response) => {
+          var questionData = JSON.stringify(this.questionsList);
+          console.log('created survey', questionData, 'ressp', response.data.surveyId);
 
-      SurveyDataService.addQuestions(questionsData).then((questionResponse) => {
-          this.$router.push({
-            name: 'surveys',
-            params: {
-              accessToken: this.accessToken,
-              role: this.role,
-              currentUserId: this.currentUserId
-            }
-          });
-        })
-        .catch((e) => {
+          SurveyDataService.addQuestions(response.data.surveyId, questionData, this.accessToken)
+            .then((questionResponse) => {
+              console.log('Added Question');
+              this.$router.push({
+                name: 'surveys',
+                params: {
+                  accessToken: this.accessToken,
+                  role: this.role,
+                  currentUserId: this.currentUserId
+                }
+              });
+            })
+            .catch((e) => {
+              this.message = e.response;
+            });
+        }).catch((e) => {
           this.message = e.response;
         });
-      });
-
-
-
-
     },
     cancel() {
       this.$router.push({
@@ -84,28 +99,50 @@ export default {
       });
     },
     add() {
-      console.log(JSON.stringify(this.questionsList), '::::::::::');
-
-      const questionIndex = this.questionsList.findIndex(x => x.id === this.selectedQuestion.id);
-      this.selectedQuestion.id = this.selectedQuestion.id + 1;
+      // const questionIndex = this.questionsList.findIndex(x => x.id === this.selectedQuestion.id);
       const question = {
         id: this.selectedQuestion.id,
+        question: '',
+        type: 'EMPTY',
+        options: [],
+        scale: []
       }
       this.questionsList.push(JSON.parse(JSON.stringify(question)));
-            console.log("Added Index:",questionIndex, "Questions Length", this.questionsList.length);
+      console.log(JSON.stringify(this.questionsList), 'Adding Question');
+      console.log("Added Empty question, Questions Length", this.questionsList.length);
+      this.selectedQuestion.id = this.selectedQuestion.id + 1;
+    },
+
+    saveQuestion(question, index) {
+      console.log(JSON.stringify(this.questionsList), 'Saving Question, with Index ->', index);
+      const updatedQuestion = {
+        id: question.id,
+        question: 'Testing....',
+        type: question.type,
+        options: [],
+        scale: []
+      }
+      // const questionIndex = this.questionsList.findIndex(x => x.id === index);
+      if (index >= 0) {
+        this.questionsList.splice(index, 1, updatedQuestion);
+      } else {
+        // this.questionsList.push(JSON.parse(JSON.stringify(updatedQuestion)));
+      }
+      console.log("Saved Question:", index, "Questions Length", this.questionsList.length, JSON.stringify(this.questionsList));
 
     },
+
     editQuestion(question, index) {
       this.selectedQuestion = JSON.parse(JSON.stringify(question));
       this.selectedQuestion.questionNumber = index + 1;
     },
     deleteQuestion(question, index) {
       this.questionsList.splice(index, 1);
-            console.log("Deleted Index:",index, "Questions Length", this.questionsList.length);
-
+      console.log("Deleted Question with Index:", index, "Questions Length", this.questionsList.length);
     },
   }
 };
+
 </script>
 <style>
 </style>
