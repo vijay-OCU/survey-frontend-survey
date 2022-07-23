@@ -14,11 +14,11 @@
         <v-btn size="small" icon="mdi-trash-can" @click="deleteQuestion(question, index)" :disabled="questionAdded" />
         <v-btn size="small" icon="mdi-content-save-outline" @click="addQuestion(question, index)"
           :disabled="questionAdded" />
-        <v-btn size="small" icon="mdi-plus-box-multiple" @click="add()">Add Question</v-btn>
+        <v-btn size="small" icon="mdi-plus-box-multiple" @click="add()" :disabled="questionAdded">Add Question</v-btn>
       </v-col>
       <div v-if="addOption">
-        <Options v-for="(option, index) in options" :key="index" :option="option"
-          @deleteQuestion="deleteOption(option, index)" @addQuestion="saveOption(option, index)" />
+        <Options v-for="(option, index) in options" :key="index" :option="option" :questionAdded="this.questionAdded"
+          @deleteOption="deleteOption(option, index)" @saveOption="saveOption(option, index)" />
       </div>
     </v-row>
 
@@ -42,8 +42,6 @@ export default defineComponent({
   data() {
     return {
       selectedOption: { id: 0 },
-      currentQuestion: this.question,
-      selectedType: 'TEXT',
       questionAdded: false,
       options: [],
       addOption: true,
@@ -56,7 +54,7 @@ export default defineComponent({
   setup(props) {
     let errors = null
     const form = ref({
-      id: 'basic-demo',
+      id: 'question-form',
       fields: {
         questionText: TextField({
           label: 'Enter the Question',
@@ -97,13 +95,14 @@ export default defineComponent({
       errors = errs
     }
     function formSubmitted(vals) {
-      console.log(vals);
-      this.$emit("addQuestion");
+      // console.log(vals);
+      // this.$emit("addQuestion");
     }
 
     function valueChange(event) {
       props.question.type = event.questionType;
       props.question.text = event.questionText;
+      console.log('question Saved?? ',props.questionAdded);
       console.log('Values:::', event.questionText, ':::', props.question.type, '::::::');
     }
     return {
@@ -127,19 +126,34 @@ export default defineComponent({
 
     addQuestion() {
       this.questionAdded = true;
+      this.question.options = this.options;
       this.$emit("addQuestion");
     },
+
+    deleteOption(option, index) {
+      this.options.splice(index, 1);
+      console.log("Deleted option with Index:", index, "Questions Length", this.options.length);
+    },
+
+
+    saveOption(option, index) {
+      console.log(JSON.stringify(this.options), 'Saving Option, with Index ->', index);
+      if (index >= 0) {
+        this.options.splice(index, 1, option.text);
+      }
+      console.log("Saved Option:", index, "Options Length", this.options.length, JSON.stringify(this.options));
+
+    },
+
+
     add() {
       const option = {
         id: this.selectedOption.id,
         text: '',
-        type: 'EMPTY',
-        options: [],
-        scale: []
       }
       this.options.push(JSON.parse(JSON.stringify(option)));
-      console.log(JSON.stringify(this.options), 'Adding Question');
-      console.log("Added Empty question, Questions Length", this.options.length);
+      console.log(JSON.stringify(this.options), 'Adding Option');
+      console.log("Added Empty option, Options Length", this.options.length);
       this.selectedOption.id = this.selectedOption.id + 1;
     },
   },

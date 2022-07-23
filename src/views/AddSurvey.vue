@@ -10,7 +10,7 @@
     <v-row>
       <v-card class="pa-md-1 mx-sm-auto" color="purple" width="300px" v-if="this.questionsList.length == 0">
         <v-card-title>Note!</v-card-title>
-        <v-card-text>Click Save on Each Question before Saving the Survey</v-card-text>
+        <v-card-text>Click Save on each question before Saving the Survey</v-card-text>
       </v-card>
     </v-row>
     <v-row>
@@ -104,7 +104,7 @@ export default {
         text: '',
         type: 'EMPTY',
         options: [],
-        scale: []
+        scale: { "min": 0, "max": 0 }
       }
       this.questionsList.push(JSON.parse(JSON.stringify(question)));
       console.log(JSON.stringify(this.questionsList), 'Adding Question');
@@ -113,14 +113,23 @@ export default {
     },
 
     saveQuestion(question, index) {
-      console.log(JSON.stringify(this.questionsList), 'Saving Question, with Index ->', index);
+
+      const updatedOptions = [];
+      question.options.forEach(option => {
+        console.log('Adding Option ->', option.text);
+        updatedOptions.push(option.text);
+      });
+
       const updatedQuestion = {
         id: question.id,
         question: question.text,
         type: question.type,
-        options: [],
+        options: updatedOptions,
         scale: []
       }
+      console.log(JSON.stringify(this.questionsList), 'Saving Question, with Index ->', index);
+
+
       // const questionIndex = this.questionsList.findIndex(x => x.id === index);
       if (index >= 0) {
         this.questionsList.splice(index, 1, updatedQuestion);
