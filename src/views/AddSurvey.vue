@@ -104,7 +104,7 @@ export default {
         text: '',
         type: 'EMPTY',
         options: [],
-        scale: { "min": 0, "max": 0 }
+        scale: null
       }
       this.questionsList.push(JSON.parse(JSON.stringify(question)));
       console.log(JSON.stringify(this.questionsList), 'Adding Question');
@@ -119,13 +119,17 @@ export default {
         console.log('Adding Option ->', option.text);
         updatedOptions.push(option.text);
       });
+      const updatedScale = {
+        "min": question.scale.min,
+        "max": question.scale.max,
+      }
 
       const updatedQuestion = {
         id: question.id,
         question: question.text,
         type: question.type,
         options: updatedOptions,
-        scale: []
+        scale: updatedScale
       }
       console.log(JSON.stringify(this.questionsList), 'Saving Question, with Index ->', index);
 
