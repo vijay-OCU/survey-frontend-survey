@@ -24,7 +24,7 @@
     <v-row justify="center">
       <v-col col="2"> </v-col>
       <v-col col="2">
-        <v-btn color="success" @click="saveSurvey()">Save</v-btn>
+        <v-btn color="success" @click="saveSurvey()">Save Survey</v-btn>
       </v-col>
       <v-col col="2">
         <v-btn color="info" @click="cancel()">Cancel</v-btn>
