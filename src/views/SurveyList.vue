@@ -1,5 +1,5 @@
 <template>
-  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUserId="this.currentUserId" />
+  <TopBar :showTabs="this.role == 'admin' ? true : false" :accessToken="this.accessToken" :role="this.role" :currentUserId="this.currentUserId" />
   <h1>Survey List</h1>
   <h4>{{ message }}</h4>
   <v-row>
@@ -21,10 +21,8 @@
       <span class="text-h6">Delete</span>
     </v-col>
   </v-row>
-  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey"
-            @viewSurvey="goViewSurvey(survey)"
-            @viewReport="goViewReport(survey)"
-            @deleteSurvey="goDelete(survey)"/>
+  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey" @viewSurvey="goViewSurvey(JSON.stringify(survey))"
+    @viewReport="goViewReport(survey)" @deleteSurvey="goDelete(survey)" />
   <v-btn @click="removeAllSurveys"> Remove All </v-btn>
 </template>
 <script>
@@ -50,24 +48,28 @@ export default {
   },
   methods: {
     goAdd() {
-      console.log('current User in Survey List', this.role, this.accessToken, this.currentUserId );
-      this.$router.push({ name: 'addSurvey', params: {
-                  accessToken: this.accessToken,
-                  role: this.role,
-                  currentUserId: this.currentUserId,
-                } });
-    },
-    goEdit(survey) {
-      this.$router.push({ name: 'editSurvey', params: { id: survey.id } });
-    },
-    goView(survey) {
+      console.log('current User in Survey List', this.role, this.accessToken, this.currentUserId);
       this.$router.push({
-        name: 'viewSurvey',
-        params: { artistName: survey.name, artistId: survey.id },
+        name: 'addSurvey', params: {
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUserId: this.currentUserId,
+        }
+      });
+    },
+    goViewSurvey(survey) {
+      this.$router.push({
+        name: `viewSurvey`,
+        params: {
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUserId: this.currentUserId,
+          id: JSON.parse(survey).id
+        },
       });
     },
     goDelete(survey) {
-            var data = {
+      var data = {
         accessToken: this.accessToken
       };
       SurveyDataService.delete(survey.id, data)
@@ -82,23 +84,23 @@ export default {
       var data = {
         accessToken: this.accessToken,
       };
-      if(this.role == 'admin'){
-      SurveyDataService.getAll(data)
-        .then(response => {
-          this.surveys = response.data;
-        })
-        .catch(e => {
-          this.message = e.response.data.message;
-        });
+      if (this.role == 'admin') {
+        SurveyDataService.getAll(data)
+          .then(response => {
+            this.surveys = response.data;
+          })
+          .catch(e => {
+            this.message = e.response.data.message;
+          });
       }
       else {
-              SurveyDataService.getByUserId(this.currentUserId, data)
-        .then(response => {
-          this.surveys = response.data;
-        })
-        .catch(e => {
-          this.message = e.response.data.message;
-        });
+        SurveyDataService.getByUserId(this.currentUserId, data)
+          .then(response => {
+            this.surveys = response.data;
+          })
+          .catch(e => {
+            this.message = e.response.data.message;
+          });
       }
 
     },
