@@ -18,16 +18,11 @@
       <span class="text-h6">Edit</span>
     </v-col>
     <v-col cols="12" sm="1">
-      <span class="text-h6">View</span>
-    </v-col>
-    <v-col cols="12" sm="1">
       <span class="text-h6">Delete</span>
     </v-col>
   </v-row>
   <UserDisplay v-for="user in users" :key="user.id" :user="user" @deleteUser="goDelete(user)" @updateUser="goEdit(user)"
-    @viewUser="goView(user)" />
-
-  <v-btn @click="removeAllUsers()"> Remove All </v-btn>
+    />
 </template>
 <script>
 import TopBar from './TopBar.vue';
@@ -49,30 +44,29 @@ export default {
   },
   methods: {
     goAdd() {
-      this.$router.push({ name: 'addUser', params: {
-                  accessToken: this.accessToken,
-                  role: this.role,
-                  currentUser: this.currentUserId,
-                }
-              });
+      this.$router.push({
+        name: 'addUser', params: {
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUser: this.currentUserId,
+        }
+      });
     },
     goEdit(user) {
-      this.$router.push({ name: 'editUser', params: {
-                  id: user.id,
-                  accessToken: this.accessToken,
-                  role: this.role,
-                  currentUser: this.currentUserId,
-                }
-              });
-    },
-    goView(user) {
-      this.$router.push({ name: 'view', params: { id: user.id } });
+      this.$router.push({
+        name: 'editUser', params: {
+          id: user.id,
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUser: this.currentUserId,
+        }
+      });
     },
     goDelete(user) {
       var data = {
         accessToken: this.accessToken,
       };
-      UserDataService.delete(user.id,data)
+      UserDataService.delete(user.id, data)
         .then(() => {
           this.retrieveUsers();
         })
@@ -100,16 +94,6 @@ export default {
     setActiveUser(user, index) {
       this.currentUser = user;
       this.currentIndex = user ? index : -1;
-    },
-    removeAllUsers() {
-      UserDataService.deleteAll()
-        .then((response) => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch((e) => {
-          this.message = e.response.data.message;
-        });
     },
   },
   mounted() {

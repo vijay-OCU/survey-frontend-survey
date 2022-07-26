@@ -14,10 +14,6 @@
   </v-col>
   <v-col  cols="9"
         sm="1">
-      <v-btn size="x-small" icon="mdi-format-list-bulleted-type" @click="viewUser"/>
-  </v-col>
-  <v-col  cols="9"
-        sm="1">
       <v-btn size="x-small" icon="mdi-trash-can" @click="deleteUser"/>
   </v-col>
 </v-row>
@@ -39,9 +35,6 @@ export default {
     updateUser() {
       this.$emit("updateUser");
     },
-    viewUser() {
-      this.$emit("viewUser");
-    }
   }
 };
 </script>
