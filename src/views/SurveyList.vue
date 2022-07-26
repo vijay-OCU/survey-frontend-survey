@@ -23,7 +23,6 @@
   </v-row>
   <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey" @viewSurvey="goViewSurvey(JSON.stringify(survey))"
     @viewReport="goViewReport(survey)" @deleteSurvey="goDelete(survey)" />
-  <v-btn @click="removeAllSurveys"> Remove All </v-btn>
 </template>
 <script>
 
@@ -113,16 +112,7 @@ export default {
       this.currentSurvey = survey;
       this.currentIndex = survey ? index : -1;
     },
-    removeAllSurveys() {
-      SurveyDataService.deleteAll()
-        .then((response) => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch((e) => {
-          this.message = e.response.data.message;
-        });
-    },
+    
 
     searchName() {
       SurveyDataService.findByName(this.surveylist)
