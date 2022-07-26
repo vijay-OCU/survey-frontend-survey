@@ -34,7 +34,6 @@
   </v-form>
 </template>
 <script>
-//import TopBarVue from './TopBar.vue';
 import SurveyDataService from '../services/SurveyDataService';
 import Questions from '../components/QuestionsDisplay.vue';
 
