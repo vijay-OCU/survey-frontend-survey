@@ -9,6 +9,7 @@
 
 <script>
 import logo from './assets/oc-logo-white.png'
+import './styles/_variables.scss'
 
 import TopBar from './views/TopBar.vue';
 export default {

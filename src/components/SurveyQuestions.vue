@@ -10,7 +10,7 @@
             <!-- Single choice options - end -->
             <!-- Multi choice options - start -->
             <div v-for="option in options" v-if="type == 'MULTI_CHOICE'">
-                <input v-model="this.form['responses'][id]" type="checkbox" :name="id" :id="option.id" :value="option.choice" />
+                <input v-model="this.form['responses'][`checkbox-${id}-${option.choice}`]" type="checkbox" :name="id" :id="option.id" :value="option.choice" />
                 <label>{{option.choice}}</label>
             </div>
 
@@ -24,8 +24,13 @@
             <label v-if="type == 'BOOLEAN'">No</label>
             <!-- BOOLEAN INPUT - END -->
             <!-- SCALE INPUT - START -->
-            <div v-for="scale in scales"  v-if="type == 'SCALE'">
-                <input type="range" v-model="this.form['responses'][id]" step="1" :min="scale.min" :max="scale.max" :name="id" />
+            <div v-for="scale in scales"  v-if="type == 'SCALE'" >
+            <div style="display: flex;">
+            <span>{{scale.min}}</span>
+                <input style="margin: 0 10px;" type="range" v-model="this.form['responses'][id]" step="1" :min="scale.min" :max="scale.max" :name="id" />
+            <span>{{scale.max}}</span>
+            </div>
+            <div style="">Selected Value: {{this.form['responses'][id] || "Not selected"}}</div>
             </div>
             <!-- SCALE INPUT _=- END -->
         </v-col>

@@ -27,5 +27,8 @@ class SurveyDataService {
   findByName(name) {
     return http.get(`/surveys?name=${name}`);
   }
+  submit(id, data) {
+    return http.post(`/surveys/${id}/submit`, data);
+  }
 }
 export default new SurveyDataService();
