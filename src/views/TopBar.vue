@@ -1,14 +1,21 @@
 <template>
-    <v-toolbar-items color="#0918DA">
-        <v-btn variant="text" @click="goUsers" v-if="this.showTabs == 'true' ? true : false" color="blue" elevation="10"
-            x-large justify-end>
-            Users
-        </v-btn>
-        <v-btn variant="text" @click="goSurveys" v-if="this.showTabs == 'true' ? true : false" color="blue"
-            elevation="10" x-large justify-end>
-            Surveys
-        </v-btn>
-    </v-toolbar-items>
+    <v-toolbar color="#FCE4EC" dense elevation="4" class="shrink mx-4">
+        <v-toolbar-items color="#0918DA">
+            <v-btn variant="text" @click="goUsers" v-if="this.showTabs == 'true' ? true : false" color="blue"
+                elevation="10" x-large justify-end>
+                Users
+            </v-btn>
+            <v-btn variant="text" @click="goSurveys" v-if="this.showTabs == 'true' ? true : false" color="blue"
+                elevation="10" x-large justify-end>
+                Surveys
+            </v-btn>
+            <v-spacer />
+            <v-btn class="text-right" variant="text" @click="goLogin"
+                color="blue" elevation="10" x-large justify-right>
+                Log Out
+            </v-btn>
+        </v-toolbar-items>
+    </v-toolbar>
 </template>
 
 <script>
@@ -37,6 +44,9 @@ export default {
                     currentUserId: this.currentUserId,
                 }
             });
+        },
+        goLogin() {
+            this.$router.push({ name: "login" });
         }
     },
 }
