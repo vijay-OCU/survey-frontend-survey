@@ -21,8 +21,9 @@
       <span class="text-h6">Delete</span>
     </v-col>
   </v-row>
-  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey" @viewSurvey="goViewSurvey(JSON.stringify(survey))"
-    @viewReport="goViewReport(survey)" @deleteSurvey="goDelete(survey)" />
+  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey"
+    @viewSurvey="goViewSurvey(JSON.stringify(survey))" @viewReport="goViewReport(JSON.stringify(survey))"
+    @deleteSurvey="goDelete(survey)" />
 </template>
 <script>
 
@@ -59,6 +60,17 @@ export default {
     goViewSurvey(survey) {
       this.$router.push({
         name: `viewSurvey`,
+        params: {
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUserId: this.currentUserId,
+          id: JSON.parse(survey).id
+        },
+      });
+    },
+    goViewReport(survey) {
+      this.$router.push({
+        name: `viewReport`,
         params: {
           accessToken: this.accessToken,
           role: this.role,
@@ -112,7 +124,7 @@ export default {
       this.currentSurvey = survey;
       this.currentIndex = survey ? index : -1;
     },
-    
+
 
     searchName() {
       SurveyDataService.findByName(this.surveylist)

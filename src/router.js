@@ -37,21 +37,28 @@ const routes = [
     props: true,
   },
 
-    //Create Survey
-    {
-      path: '/addSurvey',
-      name: 'addSurvey',
-      component: () => import('./views/AddSurvey.vue'),
-      props: true
-    },
+  //Create Survey
+  {
+    path: '/addSurvey',
+    name: 'addSurvey',
+    component: () => import('./views/AddSurvey.vue'),
+    props: true
+  },
 
-    //View Survey
-    {
-      path: '/viewSurvey/:id',
-      name: 'viewSurvey',
-      component: () => import('./views/ViewSurvey.vue'),
-      props: true
-    },
+  //View Survey
+  {
+    path: '/viewSurvey/:id',
+    name: 'viewSurvey',
+    component: () => import('./views/ViewSurvey.vue'),
+    props: true
+  },
+  //View Report
+  {
+    path: '/viewReport/:id',
+    name: 'viewReport',
+    component: () => import('./views/ViewReport.vue'),
+    props: true
+  },
 
 ];
 const router = createRouter({
