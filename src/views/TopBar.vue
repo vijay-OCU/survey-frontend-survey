@@ -10,7 +10,7 @@
                 Surveys
             </v-btn>
             <v-spacer />
-            <v-btn class="text-right" variant="text" @click="goLogin"
+            <v-btn class="text-right" v-if="this.accessToken" variant="text" @click="goLogin"
                 color="blue" elevation="10" x-large justify-right>
                 Log Out
             </v-btn>
