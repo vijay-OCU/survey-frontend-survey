@@ -1,5 +1,5 @@
 <template>
-  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUserId="this.currentUserId" />
+  <TopBar :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken" :role="this.role" :currentUserId="this.currentUserId" />
   <h1>Users List</h1>
   <h4>{{ message }}</h4>
   <v-row>
