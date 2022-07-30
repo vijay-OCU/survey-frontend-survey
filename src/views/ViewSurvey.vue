@@ -1,5 +1,5 @@
 <template>
-    <TopBar :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken" :role="this.role"
+    <TopBar v-if="this.accessToken" :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken" :role="this.role"
         :currentUserId="this.currentUserId" />
     <h1>{{ survey?.name }}</h1>
     <h1>{{ this.message }}</h1>

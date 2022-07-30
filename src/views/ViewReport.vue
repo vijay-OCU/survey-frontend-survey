@@ -1,10 +1,13 @@
 <template>
     <TopBar :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken" :role="this.role"
         :currentUserId="this.currentUserId" />
-    <h1>{{ survey?.name }}</h1>
+    <br/>
+<h1>{{ survey?.name }} Report</h1>
+    <br/>
 
     <div id="chart" cols="12" sm="2">
-        <apexchart type="pie" width="500" :options="this.chartOptions" :series="this.series"></apexchart>
+        <apexchart width="700" v-for="question in questions" :options="question.chartOptions" :series="question.series">
+        </apexchart>
     </div>
 </template>
 <script>
@@ -19,21 +22,7 @@ export default {
     data() {
         return {
             survey: {},
-            series: [5, 5, 5, 5, 10],
-            chartOptions: {
-                labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-                responsive: [{
-                    breakpoint: 100,
-                    options: {
-                        // chart: {
-                        //     width: 100
-                        // },
-                        legend: {
-                            position: 'top'
-                        }
-                    }
-                }]
-            },
+            questions: [],
         }
     },
     components: {
@@ -46,14 +35,45 @@ export default {
         retrieveSurvey() {
             const data = {}
             SurveyDataService.get(this.id, data)
-                .then(response => {
-                    this.survey = response.data[0];
+                .then(responseBody => {
+                    this.survey = responseBody.data[0];
+                    this.survey.questions.forEach(ques => {
+                        const series = [];
+                        const chartOptions = getDefaultChartOptions();
+                        if (ques.responses.length > 0) {
+                            var result = this.groupBy(ques.responses);
+                            result.forEach(resp => {
+                                series.push(resp.length);
+                                chartOptions.title.text = ques.question;
+                                chartOptions.labels.push(resp[0].response);
+                            });
+                            var question = { series, chartOptions }
+                            this.questions.push(question);
+                        }
+                    });
                 })
                 .catch(e => {
-                    this.message = e.response.data.message;
+                    console.log('exception:  ', e);
                 });
         },
+
+        groupBy(collection) {
+            var i = 0, val, index,
+                values = [], result = [];
+            for (; i < collection.length; i++) {
+                val = collection[i]["response"];
+                index = values.indexOf(val);
+                if (index > -1)
+                    result[index].push(collection[i]);
+                else {
+                    values.push(val);
+                    result.push([collection[i]]);
+                }
+            }
+            return result;
+        },
     },
+
     mounted() {
         this.retrieveSurvey();
     },
@@ -62,5 +82,87 @@ export default {
             this.retrieveSurvey();
         },
     },
+}
+
+function getDefaultChartOptions() {
+    return {
+        plotOptions: {
+            pie: {
+                size: 500,
+                donut: {
+                    size: '50%',
+                    background: 'transparent',
+                    labels: {
+                        show: true,
+                        name: {
+                            show: true,
+                            fontSize: '22px',
+                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontWeight: 600,
+                            color: undefined,
+                            offsetY: -10,
+                            formatter: function (val) {
+                                return val
+                            }
+                        },
+                        value: {
+                            show: true,
+                            fontSize: '16px',
+                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontWeight: 400,
+                            color: undefined,
+                            offsetY: 16,
+                            formatter: function (val) {
+                                return val
+                            }
+                        },
+                        total: {
+                            show: true,
+                            showAlways: false,
+                            label: 'Total',
+                            fontSize: '22px',
+                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontWeight: 600,
+                            color: '#373d3f',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => {
+                                    return a + b
+                                }, 0)
+                            }
+                        }
+                    }
+                },
+            }
+        },
+        labels: [],
+        title: {
+            text: "",
+            align: 'left',
+            margin: 10,
+            offsetX: 0,
+            offsetY: 0,
+            floating: true,
+            style: {
+                fontSize: '14px',
+                fontWeight: 'bold',
+                fontFamily: undefined,
+                color: '#263238'
+            },
+        },
+        chart: {
+            type: 'donut',
+        },
+        responsive: [{
+            breakpoint: 100,
+            options: {
+                // chart: {
+                //     width: 100
+                // },
+                legend: {
+                    position: 'top'
+                }
+            }
+        }]
+    };
 }
 </script>
