@@ -1,12 +1,13 @@
 <template>
-    <TopBar v-if="this.accessToken" :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken" :role="this.role"
-        :currentUserId="this.currentUserId" />
+    <TopBar v-if="this.accessToken" :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken"
+        :role="this.role" :currentUserId="this.currentUserId" />
     <h1>{{ survey?.name }}</h1>
     <h1>{{ this.message }}</h1>
     <form id="submit-form" v-if="!this.message" :id="'submit-form'" @submit.prevent="getFormValues">
         <SurveyQuestions v-for="(question, index) in survey?.questions" :id="question.id" :question="question.question"
             :numbering="index + 1" :type="question.type" :options="question.options" :scales="question.scales"
             :form="form" />
+            <div class="pa-5" v-bind:style="{'fontWeight': 'bold'}"> Please enter the data below and submit the survey!</div>
         <div style="margin: 15px 0;">
             <label>Participant Name</label><br />
             <input v-model="form['participantName']" placeholder="Enter name" />
@@ -18,7 +19,8 @@
         <v-btn v-if="!this.accessToken" variant="text" type="submit" color="blue" elevation="10" x-large justify-end>
             Submit Survey
         </v-btn>
-        <v-btn v-if="this.accessToken" variant="text" @click="goBack()" type="button" color="blue" elevation="10" x-large justify-end>
+        <v-btn v-if="this.accessToken" variant="text" @click="goBack()" type="button" color="blue" elevation="10"
+            x-large justify-end>
             Cancel
         </v-btn>
         <div v-if="submitted">
@@ -55,8 +57,8 @@ export default {
             const data = {}
             SurveyDataService.get(this.id, data)
                 .then(response => {
-                    if(response.data.length > 0) 
-                    this.survey = response.data[0];
+                    if (response.data.length > 0)
+                        this.survey = response.data[0];
                     else this.message = "No survey found"
                 })
                 .catch(e => {
@@ -67,9 +69,9 @@ export default {
         goBack() {
             this.$router.push({
                 name: 'surveys', params: {
-                accessToken: this.accessToken,
-                role: this.role,
-                currentUserId: this.currentUserId
+                    accessToken: this.accessToken,
+                    role: this.role,
+                    currentUserId: this.currentUserId
                 }
             });
         },
@@ -107,7 +109,7 @@ export default {
 
             SurveyDataService.submit(this.id, postbody).then(() => {
                 this.isSubmitted = true;
-            }).catch((err) => { 
+            }).catch((err) => {
                 this.isSubmitted = false;
             })
         }

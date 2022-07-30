@@ -1,9 +1,9 @@
 <template>
     <TopBar :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken" :role="this.role"
         :currentUserId="this.currentUserId" />
-    <br/>
-<h1>{{ survey?.name }} Report</h1>
-    <br/>
+    <br />
+    <h1>{{ survey?.name }} Report</h1>
+    <br />
 
     <div id="chart" cols="12" sm="2">
         <apexchart width="700" v-for="question in questions" :options="question.chartOptions" :series="question.series">
@@ -37,20 +37,20 @@ export default {
             SurveyDataService.get(this.id, data)
                 .then(responseBody => {
                     this.survey = responseBody.data[0];
-                    this.survey.questions.forEach(ques => {
+                    for (let [index, ques] of this.survey.questions.entries()) {
                         const series = [];
                         const chartOptions = getDefaultChartOptions();
                         if (ques.responses.length > 0) {
                             var result = this.groupBy(ques.responses);
                             result.forEach(resp => {
                                 series.push(resp.length);
-                                chartOptions.title.text = ques.question;
+                                chartOptions.title.text = index++ +". "+ ques.question;
                                 chartOptions.labels.push(resp[0].response);
                             });
                             var question = { series, chartOptions }
                             this.questions.push(question);
                         }
-                    });
+                    }
                 })
                 .catch(e => {
                     console.log('exception:  ', e);
@@ -90,7 +90,7 @@ function getDefaultChartOptions() {
             pie: {
                 size: 500,
                 donut: {
-                    size: '50%',
+                    size: '65%',
                     background: 'transparent',
                     labels: {
                         show: true,
@@ -138,14 +138,14 @@ function getDefaultChartOptions() {
         title: {
             text: "",
             align: 'left',
-            margin: 10,
+            margin: 25,
             offsetX: 0,
             offsetY: 0,
             floating: true,
             style: {
                 fontSize: '14px',
                 fontWeight: 'bold',
-                fontFamily: undefined,
+                fontFamily: 'Helvetica, Arial, sans-serif',
                 color: '#263238'
             },
         },
