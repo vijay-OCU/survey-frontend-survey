@@ -3,6 +3,7 @@
         :currentUserId="this.currentUserId" />
     <br />
     <h1>{{ survey?.name }} Report</h1>
+    <v-btn size="small" @click="goBack()">Go Back</v-btn>
     <br />
 
     <div id="chart" cols="12" sm="2">
@@ -32,6 +33,15 @@ export default {
 
     },
     methods: {
+        goBack() {
+            this.$router.push({
+                name: 'surveys', params: {
+                    accessToken: this.accessToken,
+                    role: this.role,
+                    currentUserId: this.currentUserId
+                }
+            });
+        },
         retrieveSurvey() {
             const data = {}
             SurveyDataService.get(this.id, data)
@@ -44,7 +54,7 @@ export default {
                             var result = this.groupBy(ques.responses);
                             result.forEach(resp => {
                                 series.push(resp.length);
-                                chartOptions.title.text = index++ +". "+ ques.question;
+                                chartOptions.title.text = index++ + ". " + ques.question;
                                 chartOptions.labels.push(resp[0].response);
                             });
                             var question = { series, chartOptions }
