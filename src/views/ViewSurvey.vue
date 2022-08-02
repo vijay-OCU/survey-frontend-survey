@@ -7,7 +7,8 @@
         <SurveyQuestions v-for="(question, index) in survey?.questions" :id="question.id" :question="question.question"
             :numbering="index + 1" :type="question.type" :options="question.options" :scales="question.scales"
             :form="form" />
-            <div class="pa-5" v-bind:style="{'fontWeight': 'bold'}"> Please enter the data below and submit the survey!</div>
+        <div class="pa-5" v-bind:style="{ 'fontWeight': 'bold' }"> Please enter the data below and submit the survey!
+        </div>
         <div style="margin: 15px 0;">
             <label>Participant Name</label><br />
             <input v-model="form['participantName']" placeholder="Enter name" />
@@ -108,9 +109,17 @@ export default {
             }
 
             SurveyDataService.submit(this.id, postbody).then(() => {
-                this.isSubmitted = true;
+                console.log("coming here")
+                this.$router.push({
+                    name: `submitted-survey`,
+                    params: {
+                        accessToken: this.accessToken,
+                        role: this.role,
+                        currentUserId: this.currentUserId,
+                    },
+                });
             }).catch((err) => {
-                this.isSubmitted = false;
+                console.log(err)
             })
         }
     },

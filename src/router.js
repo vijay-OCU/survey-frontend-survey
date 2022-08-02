@@ -52,6 +52,12 @@ const routes = [
     component: () => import('./views/ViewSurvey.vue'),
     props: true
   },
+  {
+    path: '/submitted/:id',
+    name: 'submitted-survey',
+    component: () => import('./views/CompletedSurvey.vue'),
+    props: true
+  },
   //View Report
   {
     path: '/viewReport/:id',
