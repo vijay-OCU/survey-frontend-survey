@@ -1,6 +1,8 @@
 name: DEPLOY TO STAGING
 
 on:
+    push:
+        branches: [ dev, main ]
     pull_request:
         types : [closed]
         branches:
