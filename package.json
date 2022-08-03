@@ -8,9 +8,7 @@
     "lint": "vue-cli-service lint",
     "dev": "vite --port 3001"
   },
-  "engines": {
-    "node": "16.x"
-  },
+
   "dependencies": {
     "@asigloo/vue-dynamic-forms": "^3.18.1",
     "@mdi/font": "5.9.55",
