@@ -1,4 +1,4 @@
-const { defineConfig } = require('@vue/cli-service')
+  const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   port: 8081
@@ -8,6 +8,6 @@ module.exports = {
     host: 'localhost',
     port: 8081
   },
-  publicPath: process.env.NODE_ENV === 'development' ? '/' : '/user-frontend/',
+  publicPath: process.env.NODE_ENV === 'development' ? '/' : '/survey-frontend/',
 }
 

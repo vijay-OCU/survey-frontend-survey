@@ -28,7 +28,8 @@ export default {
         password: "",
         message: "",
         accessToken: "",
-        role: ""
+        role: "",
+        id: "",
       },
       passwordFieldType: "password",
     };
@@ -50,17 +51,24 @@ export default {
             this.user.role = response.data.role;
             this.user.accessToken = response.data.accessToken;
             this.user.message = "";
+            this.user.id = response.data.userId;
+            console.log('Current User Id after Login ->', this.user.id, response.data.userId);
             if (response.data.role == "admin") {
               this.$router.push({
                 name: 'users', params: {
                   accessToken: this.user.accessToken,
                   role: this.user.role,
-                  currentUser: this.user.username,
+                  currentUserId: this.user.id,
                 }
               });
             }
             else {
-              this.$router.push({ name: 'surveys' })
+              this.$router.push({ name: 'surveys' , params: {
+                  accessToken: this.user.accessToken,
+                  role: this.user.role,
+                  currentUserId: this.user.id,
+                }
+              })
             }
           }
 

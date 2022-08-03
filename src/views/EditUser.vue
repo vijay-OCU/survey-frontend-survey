@@ -4,7 +4,7 @@
     <v-form>
        <v-text-field
             label="Username"
-            v-model="user.title"
+            v-model="user.username"
         />
         <v-text-field
             label="Emailid"
@@ -28,7 +28,7 @@
 import UserDataService from "../services/UserDataService";
 export default {
   name: "edit-user",
-  props: ['id'],
+  props: ['accessToken', 'role', 'currentUserId','id'],
   data() {
     return {
       user: {},
@@ -37,33 +37,46 @@ export default {
   },
   methods: {
     retrieveUser() {
-      UserDataService.get(this.id)
+      var data = {
+        accessToken: this.accessToken
+      };
+      UserDataService.get(this.id,data)
         .then(response => {
           this.user= response.data;
         })
         .catch(e => {
           this.message = e.response.data.message;
         });
-
     },
 
     updateUser() {
       var data = {
-        title: this.user.title,
+        username: this.user.username,
         emailid: this.user.emailid,
+        accessToken: this.accessToken
       };
       UserDataService.update(this.id,data)
         .then(response => {
-          this.user.id = response.data.id;
-          console.log("add "+response.data);
-          this.$router.push({ name: 'users' });
+          this.$router.push({
+                name: 'users', params: {
+                  accessToken: this.accessToken,
+                  role: this.role,
+                  currentUser: this.username
+                }
+              });
         })
         .catch(e => {
           this.message = e.response.data.message;
         });
     },
     cancel(){
-        this.$router.push({ name: 'users' });
+        this.$router.push({
+                name: 'users', params: {
+                  accessToken: this.accessToken,
+                  role: this.role,
+                  currentUser: this.username
+                }
+              });
     }
   },
     mounted() {

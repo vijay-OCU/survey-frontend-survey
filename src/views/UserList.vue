@@ -1,16 +1,10 @@
 <template>
-  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUser="this.currentUser" />
+  <TopBar :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken" :role="this.role" :currentUserId="this.currentUserId" />
   <h1>Users List</h1>
   <h4>{{ message }}</h4>
   <v-row>
     <v-col cols="12" sm="2">
       <v-btn color="success" @click="goAdd"> Add User</v-btn>
-    </v-col>
-    <v-col col="12" sm="8">
-      <v-text-field density="compact" clearable v-model="title" />
-    </v-col>
-    <v-col cols="12" sm="1">
-      <v-btn color="success" @click="searchTitle"> Search </v-btn>
     </v-col>
   </v-row>
   <v-row>
@@ -24,16 +18,11 @@
       <span class="text-h6">Edit</span>
     </v-col>
     <v-col cols="12" sm="1">
-      <span class="text-h6">View</span>
-    </v-col>
-    <v-col cols="12" sm="1">
       <span class="text-h6">Delete</span>
     </v-col>
   </v-row>
   <UserDisplay v-for="user in users" :key="user.id" :user="user" @deleteUser="goDelete(user)" @updateUser="goEdit(user)"
-    @viewUser="goView(user)" />
-
-  <v-btn @click="removeAllUsers()"> Remove All </v-btn>
+    />
 </template>
 <script>
 import TopBar from './TopBar.vue';
@@ -41,16 +30,13 @@ import UserDataService from '../services/UserDataService';
 import UserDisplay from '@/components/UserDisplay.vue';
 export default {
   name: 'users-list',
-  props: ['accessToken', 'role', 'currentUser'],
+  props: ['accessToken', 'role', 'currentUserId'],
   data() {
     return {
       users: [],
       currentIndex: -1,
       title: '',
-      message: 'Search, Edit or Delete Users',
-      // accessToken: this.accessToken,
-      // role: this.role,
-      // currentUser: this.currentUser,
+      message: 'Search, Edit or Delete Users'
     };
   },
   components: {
@@ -58,21 +44,29 @@ export default {
   },
   methods: {
     goAdd() {
-      this.$router.push({ name: 'addUser', params: {
-                  accessToken: this.accessToken,
-                  role: this.role,
-                  currentUser: this.username,
-                }
-              });
+      this.$router.push({
+        name: 'addUser', params: {
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUser: this.currentUserId,
+        }
+      });
     },
     goEdit(user) {
-      this.$router.push({ name: 'editUser', params: { id: user.id } });
-    },
-    goView(user) {
-      this.$router.push({ name: 'view', params: { id: user.id } });
+      this.$router.push({
+        name: 'editUser', params: {
+          id: user.id,
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUser: this.currentUserId,
+        }
+      });
     },
     goDelete(user) {
-      UserDataService.delete(user.id)
+      var data = {
+        accessToken: this.accessToken,
+      };
+      UserDataService.delete(user.id, data)
         .then(() => {
           this.retrieveUsers();
         })
@@ -100,27 +94,6 @@ export default {
     setActiveUser(user, index) {
       this.currentUser = user;
       this.currentIndex = user ? index : -1;
-    },
-    removeAllUsers() {
-      UserDataService.deleteAll()
-        .then((response) => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch((e) => {
-          this.message = e.response.data.message;
-        });
-    },
-
-    searchTitle() {
-      UserDataService.findByTitle(this.title)
-        .then((response) => {
-          this.users = response.data;
-          this.setActiveUser(null);
-        })
-        .catch((e) => {
-          this.message = e.response.data.message;
-        });
     },
   },
   mounted() {

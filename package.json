@@ -1,5 +1,5 @@
 {
-  "name": "user-frontend",
+  "name": "survey-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,9 @@
     "dev": "vite --port 3001"
   },
   "dependencies": {
+    "@asigloo/vue-dynamic-forms": "^3.18.1",
     "@mdi/font": "5.9.55",
+    "apexcharts": "^3.35.4",
     "axios": "^0.27.0",
     "core-js": "^3.8.3",
     "cors": "^2.8.5",
@@ -22,6 +24,7 @@
     "url": "^0.11.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.14",
+    "vue3-apexcharts": "^1.4.1",
     "vuetify": "^3.0.0-beta.0",
     "webfontloader": "^1.0.0"
   },

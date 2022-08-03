@@ -1,21 +1,18 @@
 <template>
-  <TopBar showTabs=true :accessToken="this.accessToken" :role="this.role" :currentUser="this.currentUser" />
+  <TopBar :showTabs="this.role == 'admin' ? 'true' : 'false'" :accessToken="this.accessToken" :role="this.role" :currentUserId="this.currentUserId" />
   <h1>Survey List</h1>
   <h4>{{ message }}</h4>
   <v-row>
     <v-col cols="12" sm="2">
       <v-btn color="success" @click="goAdd"> Create Survey</v-btn>
     </v-col>
-    <v-col col="12" sm="8">
-      <v-text-field density="compact" clearable v-model="surveylist" />
-    </v-col>
-    <v-col cols="12" sm="1">
-      <v-btn color="success" @click="searchName"> Search </v-btn>
-    </v-col>
   </v-row>
   <v-row>
     <v-col cols="12" sm="2">
       <span class="text-h6">Surveyname</span>
+    </v-col>
+    <v-col cols="12" sm="2">
+      <span class="text-h6">View Survey</span>
     </v-col>
     <v-col cols="12" sm="2">
       <span class="text-h6">View Report</span>
@@ -24,10 +21,9 @@
       <span class="text-h6">Delete</span>
     </v-col>
   </v-row>
-  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey" @deleteSurvey="goDelete(survey)"
-    @updateSurvey="goEdit(survey)" @viewSurvey="goView(survey)" />
-
-  <v-btn @click="removeAllSurveys"> Remove All </v-btn>
+  <SurveyDisplay v-for="survey in surveys" :key="survey.id" :survey="survey"
+    @viewSurvey="goViewSurvey(JSON.stringify(survey))" @viewReport="goViewReport(JSON.stringify(survey))"
+    @deleteSurvey="goDelete(survey)" />
 </template>
 <script>
 
@@ -37,7 +33,7 @@ import SurveyDisplay from '../components/SurveyDisplay.vue';
 
 export default {
   name: 'surveys-list',
-  props: ['accessToken', 'role', 'currentUser'],
+  props: ['accessToken', 'role', 'currentUserId'],
   data() {
     return {
       surveys: [],
@@ -52,19 +48,42 @@ export default {
   },
   methods: {
     goAdd() {
-      this.$router.push({ name: 'addSurvey' });
-    },
-    goEdit(survey) {
-      this.$router.push({ name: 'editSurvey', params: { id: survey.id } });
-    },
-    goView(survey) {
+      console.log('current User in Survey List', this.role, this.accessToken, this.currentUserId);
       this.$router.push({
-        name: 'viewSurvey',
-        params: { artistName: survey.name, artistId: survey.id },
+        name: 'addSurvey', params: {
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUserId: this.currentUserId,
+        }
+      });
+    },
+    goViewSurvey(survey) {
+      this.$router.push({
+        name: `viewSurvey`,
+        params: {
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUserId: this.currentUserId,
+          id: JSON.parse(survey).id
+        },
+      });
+    },
+    goViewReport(survey) {
+      this.$router.push({
+        name: `viewReport`,
+        params: {
+          accessToken: this.accessToken,
+          role: this.role,
+          currentUserId: this.currentUserId,
+          id: JSON.parse(survey).id
+        },
       });
     },
     goDelete(survey) {
-      SurveyDataService.delete(survey.id)
+      var data = {
+        accessToken: this.accessToken
+      };
+      SurveyDataService.delete(survey.id, data)
         .then(() => {
           this.retrieveSurveys();
         })
@@ -76,13 +95,25 @@ export default {
       var data = {
         accessToken: this.accessToken,
       };
-      SurveyDataService.getAll(data)
-        .then(response => {
-          this.surveys = response.data;
-        })
-        .catch(e => {
-          this.message = e.response.data.message;
-        });
+      if (this.role == 'admin') {
+        SurveyDataService.getAll(data)
+          .then(response => {
+            this.surveys = response.data;
+          })
+          .catch(e => {
+            this.message = e.response.data.message;
+          });
+      }
+      else {
+        SurveyDataService.getByUserId(this.currentUserId, data)
+          .then(response => {
+            this.surveys = response.data;
+          })
+          .catch(e => {
+            this.message = e.response.data.message;
+          });
+      }
+
     },
     refreshList() {
       this.retrieveSurveys();
@@ -93,16 +124,7 @@ export default {
       this.currentSurvey = survey;
       this.currentIndex = survey ? index : -1;
     },
-    removeAllSurveys() {
-      SurveyDataService.deleteAll()
-        .then((response) => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch((e) => {
-          this.message = e.response.data.message;
-        });
-    },
+
 
     searchName() {
       SurveyDataService.findByName(this.surveylist)
